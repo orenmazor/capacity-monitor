@@ -5,8 +5,8 @@ class MetricRules
     @@rules ||= YAML.load(File.read(Rails.root + 'config/rules.yml'))
   end
 
-  def self.match?(metric)
+  def self.match?(host, metric)
     debugger
-    self.rules.detect { |r| metric =~ /#{r["pattern"]}/ }
+    self.rules.detect { |r| host =~ /#{r["host"]}/ && metric =~ /#{r["pattern"]}/ }
   end
 end

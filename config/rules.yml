@@ -1,8 +1,16 @@
 - pattern: "System/Disk/.*/Writes/Utilization/percent"
+  host: ".*"
 - pattern: "System/Disk/.*/Reads/Utilization/percent"
+  host: ".*"
 - pattern: "System/CPU/System/percent"
+  host: ".*"
 - pattern: "System/CPU/User/percent"
+  host: ".*"
 - pattern: "System/CPU/IO Wait/percent"
+  host: ".*"
 - pattern: "System/Network/eth0/All/bytes/sec"
+  host: ".*"
+  maximum: 1000000000
 - pattern: "System/CPU/Stolen/percent"
+  host: ".*"
 
