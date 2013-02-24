@@ -2,13 +2,13 @@ require 'test_helper'
 
 class MetricTest < ActiveSupport::TestCase
   test "Metrics createable" do
-    host = Host.new( :fetched_at => Time.now)
-    host.id = 100
-    host.save
+    agent = Agent.new( :fetched_at => Time.now)
+    agent.id = 100
+    agent.save
 
     metric = Metric.new
     metric.name = "Disk IO"
-    metric.host = host
+    metric.agent = agent
     metric.source = "NewRelic"
     metric.reference = "http://asdf.com"
     metric.maximum = 100

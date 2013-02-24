@@ -1,4 +1,4 @@
 class Metric < ActiveRecord::Base
-  belongs_to :host
+  belongs_to :agent
   has_many :samples
 end

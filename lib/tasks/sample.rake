@@ -12,18 +12,18 @@ namespace :newrelic do
     fetched_at = Time.now.utc
     count = 0
 
-    Host.transaction do
+    Agent.transaction do
       data.each do |hash|
-        if match=Host.match?(hash['hostname'])
-          host = Host.new(hostname: hash['hostname'], fetched_at: fetched_at)
-          host.id = hash['id']
-          host.role = match['role']
-          host.save
+        if match = Agent.match?(hash['hostname'])
+          agent = Agent.new(hostname: hash['hostname'], fetched_at: fetched_at)
+          agent.id = hash['id']
+          agent.role = match['role']
+          agent.save
           count+=1
         end
       end
     end
 
-    $stdout.puts "Imported #{count} hosts from newrelic"
+    $stdout.puts "Imported #{count} agents from newrelic"
   end
 end

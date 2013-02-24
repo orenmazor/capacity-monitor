@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130224211232) do
+ActiveRecord::Schema.define(:version => 20130224213033) do
 
-  create_table "hosts", :force => true do |t|
+  create_table "agents", :force => true do |t|
     t.string   "agent_id"
-    t.datetime "fetched_at"
+    t.datetime "fetched_at", :null => false
     t.string   "hostname"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
