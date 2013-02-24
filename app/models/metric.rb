@@ -1,3 +1,3 @@
 class Metric < ActiveRecord::Base
-  # attr_accessible :title, :body
+  belongs_to :host
 end

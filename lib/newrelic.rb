@@ -7,7 +7,7 @@ class Newrelic
     mattr_accessor :application_name
 
     def application
-      @@application ||= account.applications.detect { |a| a.name == @@application_name }
+      @@application ||= account.applications.detect { |a| a.name == self.application_name }
     end
 
     def nr_get(url)
@@ -22,12 +22,20 @@ class Newrelic
       JSON.parse(response) unless response.blank?
     end
 
-    def get_servers(app=application)
-      get_json("#{app.servers_url}.json")
+    def get_servers(app=nil)
+      if app
+        get_json("#{app.servers_url}.json")
+      else
+        get_json(servers_url)
+      end
     end
 
     def get_metrics(agent_id)
       get_json("https://api.newrelic.com/api/v1/agents/#{agent_id}/metrics.json")
+    end
+
+    def servers_url
+      "https://api.newrelic.com/api/v1/accounts/#{account.id}/servers.json"
     end
   end
 end
