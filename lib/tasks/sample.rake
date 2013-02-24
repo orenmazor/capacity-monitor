@@ -2,28 +2,17 @@
 namespace :newrelic do
   desc "sample metrics from newrelic"
   task :sample => [:environment] do
-    data = []
-    begin
-      data = Newrelic.get_servers
-    rescue StandardError => e
-      puts "Impossible to fetch the list of servers: #{e}"
+
+    Agent.find_each do |agent|
+      agent.sync_metrics
     end
 
-    fetched_at = Time.now.utc
-    count = 0
-
-    Agent.transaction do
-      data.each do |hash|
-        if match = Agent.match?(hash['hostname'])
-          agent = Agent.new(hostname: hash['hostname'], fetched_at: fetched_at)
-          agent.id = hash['id']
-          agent.role = match['role']
-          agent.save
-          count+=1
-        end
-      end
+    start =  Time.now.utc - 20.minutes
+    finish = Time.now.utc - 10.minutes
+    Metric.find_each do |metric|
+      metric.generate_sample(start, finish)
     end
 
-    $stdout.puts "Imported #{count} agents from newrelic"
+    $stdout.puts "Imported #{count} hosts from newrelic"
   end
 end
