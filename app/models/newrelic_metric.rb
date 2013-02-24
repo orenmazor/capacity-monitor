@@ -1,0 +1,3 @@
+class NewrelicMetric < Metric
+
+end
