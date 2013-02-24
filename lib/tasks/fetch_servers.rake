@@ -3,7 +3,7 @@ namespace :newrelic do
   desc "fetch server list from newrelic"
   task :fetch_servers => [:environment] do
     begin
-      data = JSON.load(`curl -gH "x-api-key:#{ENV['NEWRELIC_API_KEY']}"  https://api.newrelic.com/api/v1/accounts/12/servers.json 2>/dev/null`)
+      data = Newrelic.get_servers
     rescue Standarderror => e
       puts "Impossible to fetch the list of servers: #{e}"
     end
@@ -18,8 +18,7 @@ namespace :newrelic do
       end
     end
 
-    $stdout.puts "Imported the current hosts form newrelic"
-
+    $stdout.puts "Imported #{data.count} hosts from newrelic"
 
   end
 end

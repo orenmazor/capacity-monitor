@@ -1,10 +1,10 @@
 class Newrelic
-  class < self
+  class << self
     def account
       @@account ||= NewRelicApi::Account.first
     end
 
-    attr_accessible :application_name
+    mattr_accessor :application_name
 
     def application
       @@application ||= account.applications.detect { |a| a.name == @@application_name }
@@ -22,7 +22,7 @@ class Newrelic
       JSON.parse(response) unless response.blank?
     end
 
-    def get_servers(app)
+    def get_servers(app=application)
       get_json("#{app.servers_url}.json")
     end
 
