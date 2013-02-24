@@ -15,6 +15,8 @@ class NewrelicMetric < Metric
     if maximum
       value /= maximum
     end
-    self.samples.create(:value => value)
+
+
+    self.samples.create(:value => value, :fetched_at => start)
   end
 end
