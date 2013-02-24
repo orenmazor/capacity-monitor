@@ -1,14 +1,14 @@
-class Host < ActiveRecord::Base
+class Agent < ActiveRecord::Base
   attr_accessible :agent_id, :fetched_at, :hostname
 
   has_many :metrics
 
   def self.rules
-    @@rules ||= YAML.load(File.read(Rails.root + 'config/host_rules.yml'))
+    @@rules ||= YAML.load(File.read(Rails.root + 'config/agent_rules.yml'))
   end
 
-  def self.match?(host)
-    self.rules.detect { |r| host =~ /#{r["pattern"]}/ }
+  def self.match?(agent)
+    self.rules.detect { |r| agent =~ /#{r["pattern"]}/ }
   end
 
   def fetch_metrics
@@ -19,11 +19,11 @@ class Host < ActiveRecord::Base
   def sync_metrics
     metric_list = fetch_metrics
     metric_list.each do |metric|
-      unless Metric.find_by_host_id_and_name(id, metric['name'])
+      unless Metric.find_by_agent_id_and_name(id, metric['name'])
         rule = MetricRules.match?(metric)
         record = NewrelicMetric.new
         record.name = metric["name"]
-        record.host_id = id
+        record.agent_id = id
         record.field = rule["field"]
         if rule.has_key? 'maximum'
           record.maximum = rule['maximum']
