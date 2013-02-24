@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130224213033) do
+ActiveRecord::Schema.define(:version => 20130224221225) do
 
   create_table "agents", :force => true do |t|
     t.string   "agent_id"
-    t.datetime "fetched_at", :null => false
+    t.datetime "fetched_at"
     t.string   "hostname"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(:version => 20130224213033) do
     t.integer  "maximum"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "host_id"
+    t.integer  "agent_id"
     t.string   "field"
   end
 
