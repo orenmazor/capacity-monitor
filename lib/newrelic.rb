@@ -7,7 +7,7 @@ class Newrelic
     mattr_accessor :application_name
 
     def application
-      @@application ||= account.applications.detect { |a| a.name == self.application_name }
+      @@application ||= account.applications.detect { |a| a.name.downcase == application_name.downcase }
     end
 
     def nr_get(url)
