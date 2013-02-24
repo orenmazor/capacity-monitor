@@ -9,10 +9,13 @@ namespace :newrelic do
 
     start =  Time.now.utc - 20.minutes
     finish = Time.now.utc - 10.minutes
+    count = 0
+
     Metric.find_each do |metric|
+      count += 1
       metric.generate_sample(start, finish)
     end
 
-    $stdout.puts "Imported #{count} hosts from newrelic"
+    $stdout.puts "Generated #{count} samples from newrelic"
   end
 end
