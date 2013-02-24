@@ -2,7 +2,9 @@ require 'test_helper'
 
 class MetricTest < ActiveSupport::TestCase
   test "Metrics createable" do
-    host = Host.new
+    host = Host.new( :fetched_at => Time.now)
+    host.id = 100
+    host.save
 
     metric = Metric.new
     metric.name = "Disk IO"

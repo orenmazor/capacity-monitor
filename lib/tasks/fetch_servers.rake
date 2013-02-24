@@ -1,4 +1,3 @@
-
 namespace :newrelic do
   desc "fetch server list from newrelic"
   task :fetch_servers => [:environment] do
@@ -14,7 +13,7 @@ namespace :newrelic do
 
     Host.transaction do
       data.each do |hash|
-        if match=Host.match?(hash['hostname'])
+        if (match = Host.match?(hash['hostname'])) && !Host.exists?(:id => hash['id'])
           host = Host.new(hostname: hash['hostname'], fetched_at: fetched_at)
           host.id = hash['id']
           host.role = match['role']
