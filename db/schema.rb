@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130224183150) do
+ActiveRecord::Schema.define(:version => 20130224211232) do
 
   create_table "hosts", :force => true do |t|
     t.string   "agent_id"
@@ -19,18 +19,17 @@ ActiveRecord::Schema.define(:version => 20130224183150) do
     t.string   "hostname"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "host_type"
+    t.string   "role"
   end
 
   create_table "metrics", :force => true do |t|
     t.string   "name"
     t.string   "type"
-    t.string   "reference"
     t.integer  "maximum"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "source"
     t.integer  "host_id"
+    t.string   "field"
   end
 
   create_table "samples", :force => true do |t|
