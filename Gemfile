@@ -9,6 +9,7 @@ gem 'pg'
 gem 'newrelic_api'
 gem 'curb'
 
+gem "d3-rails"
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem "twitter-bootstrap-rails"
