@@ -8,4 +8,9 @@ class MetricRules
   def self.match?(host, metric)
     self.rules.detect { |r| host =~ /#{r["host"]}/ && metric =~ /#{r["pattern"]}/ }
   end
+
+  def self.match_host?(host)
+    self.rules.detect { |r| host =~ /#{r["host"]}/ }
+  end
+
 end

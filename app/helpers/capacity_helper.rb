@@ -1,0 +1,2 @@
+module CapacityHelper
+end
