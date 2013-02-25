@@ -12,11 +12,12 @@ class Agent < ActiveRecord::Base
   end
 
   def fetch_metrics
-    metric_list = Newrelic.get_metrics(id)
+    metric_list = Newrelic.get_metrics(agent_id)
     metric_list.find_all { |m| MetricRules.match?(m) }
   end
 
   def sync_metrics
+    return if role == "Application"
     metric_list = fetch_metrics
     metric_list.each do |metric|
       unless Metric.find_by_agent_id_and_name(id, metric['name'])

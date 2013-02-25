@@ -15,7 +15,7 @@ namespace :newrelic do
       data.each do |hash|
         if (match = Agent.match?(hash['hostname'])) && !Agent.exists?(:id => hash['id'])
           agent = Agent.new(hostname: hash['hostname'], fetched_at: fetched_at)
-          agent.id = hash['id']
+          agent.agent_id = hash['id']
           agent.role = match['role']
           agent.save
           count+=1
@@ -24,5 +24,16 @@ namespace :newrelic do
     end
 
     $stdout.puts "Imported #{count} hosts from newrelic"
+
+    app = Agent.new
+    app.agent_id = Newrelic.application.id
+    app.role = "Application"
+    app.save
+
+    rpm = NewrelicAppMetric.new
+    rpm.agent_id = app.id
+    rpm.name = "Throughput"
+    rpm.field = "metric_value"
+    rpm.save
   end
 end

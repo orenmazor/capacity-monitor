@@ -11,7 +11,7 @@ namespace :newrelic do
     finish = Time.now.utc - 10.minutes
     count = 0
 
-    Metric.find_each do |metric|
+    Metric.where("").find_each do |metric|
       count += 1
       metric.generate_sample(start, finish)
     end

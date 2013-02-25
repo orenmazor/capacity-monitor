@@ -8,6 +8,7 @@ gem 'rails', '3.2.12'
 gem 'pg'
 gem 'newrelic_api'
 gem 'curb'
+gem 'xml-simple'
 
 gem "d3-rails"
 gem "therubyracer"

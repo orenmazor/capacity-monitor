@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130224221225) do
+ActiveRecord::Schema.define(:version => 20130225012823) do
 
   create_table "agents", :force => true do |t|
     t.string   "agent_id"
@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(:version => 20130224221225) do
 
   create_table "samples", :force => true do |t|
     t.integer  "metric_id"
-    t.decimal  "value",      :precision => 6, :scale => 4
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.decimal  "value",      :precision => 14, :scale => 4
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
 end

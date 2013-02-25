@@ -1,3 +1,5 @@
+require 'xmlsimple'
+
 class Newrelic
   class << self
     def account
@@ -32,6 +34,12 @@ class Newrelic
 
     def get_metrics(agent_id)
       get_json("https://api.newrelic.com/api/v1/agents/#{agent_id}/metrics.json")
+    end
+
+    def get_threshold_values(agent_id)
+      body = nr_get("https://api.newrelic.com/api/v1/accounts/#{account.id}/applications/#{agent_id}/threshold_values.xml")
+      doc = XmlSimple.xml_in(body)
+      doc["threshold_value"]
     end
 
     def servers_url
