@@ -13,7 +13,7 @@ namespace :newrelic do
 
     Agent.transaction do
       data.each do |hash|
-        if (match = Agent.match?(hash['hostname'])) && !Agent.exists?(:id => hash['id'])
+        if (match = Agent.match?(hash['hostname'])) && !Agent.exists?(:agent_id => hash['id'])
           agent = Agent.new(hostname: hash['hostname'], fetched_at: fetched_at)
           agent.agent_id = hash['id']
           agent.role = match['role']
@@ -28,6 +28,7 @@ namespace :newrelic do
     app = Agent.new
     app.agent_id = Newrelic.application.id
     app.role = "Application"
+    app.fetched_at = fetched_at
     app.save
 
     rpm = NewrelicAppMetric.new
