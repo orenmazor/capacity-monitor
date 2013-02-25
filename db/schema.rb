@@ -11,11 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130225012823) do
+=======
+ActiveRecord::Schema.define(:version => 20130224230538) do
+>>>>>>> 9fdd82ddc5bada3e27d2f7b1b0d249a1023516a9
 
   create_table "agents", :force => true do |t|
     t.string   "agent_id"
-    t.datetime "fetched_at"
+    t.datetime "fetched_at", :null => false
     t.string   "hostname"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -35,8 +39,9 @@ ActiveRecord::Schema.define(:version => 20130225012823) do
   create_table "samples", :force => true do |t|
     t.integer  "metric_id"
     t.decimal  "value",      :precision => 14, :scale => 4
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+    t.datetime "fetched_at"
   end
 
 end
