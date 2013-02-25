@@ -13,10 +13,14 @@ class Newrelic
     end
 
     def nr_get(url)
-      response = Curl::Easy.perform(url) do |curl|
-        curl.headers["x-api-key"] = NewRelicApi.api_key
+      begin
+        response = Curl::Easy.perform(url) do |curl|
+          curl.headers["x-api-key"] = NewRelicApi.api_key
+        end
+        response.body_str
+      rescue Curl::Err::HostResolutionError
+        nil
       end
-      response.body_str
     end
 
     def get_json(url)
