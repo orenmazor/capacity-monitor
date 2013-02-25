@@ -6,3 +6,15 @@ body { color:#49423D; background-color:#BCB77B; text-align:center; padding-top:2
 
 .conclusion { font-size:20px; }
 .rpm {font-size:140%;}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: steelblue;
+}
+
