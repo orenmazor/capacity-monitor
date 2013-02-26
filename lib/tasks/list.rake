@@ -42,7 +42,7 @@ namespace :newrelic do
     puts "Fields and values for #{name} on agent #{agent}"
     metric["fields"].each do |f|
       value = Newrelic.get_value(agent, metric["name"], f)
-      puts "\t\t#{f}:#{value}"
+      puts "\t#{f}\t\t\t#{value[0][f]}"
     end
   end
 end
