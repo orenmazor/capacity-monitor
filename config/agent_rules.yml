@@ -4,4 +4,6 @@
   role: "Database Server"
 - pattern: "^jobs.*"
   role: "Job Server"
+- pattern: "^memcache.*"
+  role: "Memcache Server"
 
