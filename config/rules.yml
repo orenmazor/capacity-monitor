@@ -2,15 +2,9 @@
   field: "average_value"
 - pattern: "System/Disk/.*/Reads/Utilization/percent"
   field: "average_value"
-- pattern: "System/CPU/System/percent"
+- pattern: "System/CPU/.*/percent"
   field: "average_value"
-- pattern: "System/CPU/User/percent"
-  field: "average_value"
-- pattern: "System/CPU/IO Wait/percent"
-  field: "average_value"
-- pattern: "System/Network/eth0/All/bytes/sec"
+- pattern: "System/Network/.*/All/bytes/sec"
   field: "max_per_second"
-  maximum: 1000000000
-- pattern: "System/CPU/Stolen/percent"
-  field: "average_value"
+  maximum: 125000000
 

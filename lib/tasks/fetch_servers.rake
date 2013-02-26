@@ -36,5 +36,9 @@ namespace :newrelic do
     rpm.name = "Throughput"
     rpm.field = "metric_value"
     rpm.save
+
+    Agent.find_each do |agent|
+      agent.sync_metrics
+    end
   end
 end

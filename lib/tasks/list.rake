@@ -20,6 +20,7 @@ namespace :newrelic do
   desc "list host metrics from newrelic"
   task :list_metrics => [:environment] do
     agent = ENV["AGENT"] || Newrelic.get_servers.first["id"]
+    puts "Listing metrics for #{agent}"
     print_metrics(agent)
   end
 

@@ -1,7 +1,7 @@
 class NewrelicMetric < Metric
 
-  def populate(raw)
-    value = raw[0][field]
+  def populate(raw, start)
+    value = raw[field]
     value = maximum ? ((value.to_f / maximum.to_f) * 100) : value
 
     self.samples.create(:value => value, :fetched_at => start)
@@ -13,6 +13,6 @@ class NewrelicMetric < Metric
       puts "Error generating sample for #{agent.agent_id}:#{name} - raw #{raw}"
       return
     end
-    populate(raw)
+    populate(raw[0])
   end
 end

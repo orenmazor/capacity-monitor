@@ -3,17 +3,62 @@ namespace :newrelic do
   desc "sample metrics from newrelic"
   task :sample => [:environment] do
 
-    Agent.find_each do |agent|
-      agent.sync_metrics
-    end
+    puts "Syncing metrics for agents..."
 
-    start =  Time.now.utc - 20.minutes
-    finish = Time.now.utc - 10.minutes
+    # get application-level metric, which also gives us a start and end time
+    metric = NewrelicAppMetric.first
+
+    times = metric.generate_sample
+
+    puts "times #{times}"
+
+    start = Time.parse(times[0])
+    finish = Time.parse(times[1])
+
+    finish, start = start, finish if finish < start
+
+    start = start.iso8601(0)
+    finish = finish.iso8601(0)
+
+    puts "start #{start} finish #{finish}"
     count = 0
 
-    Metric.where("").find_each do |metric|
-      count += 1
-      metric.generate_sample(start, finish)
+    fields = NewrelicMetric.uniq.pluck(:field)
+    fields.each do |field|
+      metrics = Metric.uniq.where(["field = ?", field]).pluck(:name)
+      agent_ids = Metric.uniq.joins("LEFT OUTER JOIN agents ON agents.id = metrics.agent_id").where(["field = ?", field]).pluck("agents.agent_id").map { |r| r.to_s }
+
+      agents = Agent.where(:agent_id => agent_ids)
+
+      result = []
+      metrics.each_slice(10) do |slice|
+        tmp = Newrelic.get_value(agent_ids, slice, field, start, finish) || []
+        if tmp.is_a? Array
+          result += tmp
+        else
+          puts "Newrelic returned #{tmp}, expecting array"
+        end
+      end
+
+      results_by_agent = {}
+
+      result.each do |r|
+        results_by_agent[r["agent_id"].to_i] ||= []
+        results_by_agent[r["agent_id"].to_i] << r
+      end
+
+      puts "agents.count #{agents.count}"
+      agents.each do |agent|
+        if results_by_agent[agent.agent_id.to_i]
+          agent.metrics.each do |metric|
+            sample = results_by_agent[agent.agent_id.to_i].detect { |res| res["name"] == metric.name }
+            if sample
+              metric.populate(sample, start)
+              count +=1
+            end
+          end
+        end
+      end
     end
 
     $stdout.puts "Generated #{count} samples from newrelic"

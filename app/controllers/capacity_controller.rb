@@ -22,7 +22,7 @@ class CapacityController < ApplicationController
       metric.points = []
       samples = metric.samples.order("fetched_at DESC").limit(10)
       samples.each do |sample|
-        metric.points << [sample.value.to_f, app_samples_by_fetched[sample.fetched_at].value.to_f]
+        metric.points << [sample.value.to_f, app_samples_by_fetched[sample.fetched_at].value.to_f] if app_samples_by_fetched[sample.fetched_at]
       end
       if metric.points.count > 1
         metric.points.sort_by! { |p| p[0] }
@@ -41,8 +41,11 @@ class CapacityController < ApplicationController
       # y = mx + b
       b = first[1] - (m*first[0])
       metric.prediction = ((m * 100.0) + b)
+      metric.best_fit = [[0, b], [100, metric.prediction]]
       Rails.logger.info "m #{m}, b #{b}, prediction is #{metric.prediction}"
+
     end
     @metrics.reject! { |m| m.prediction < 0 || m.prediction.nan? }.sort_by! { |m| m.prediction }
   end
 end
+

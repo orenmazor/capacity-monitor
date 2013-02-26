@@ -18,7 +18,8 @@ class Newrelic
           curl.headers["x-api-key"] = NewRelicApi.api_key
         end
         response.body_str
-      rescue Curl::Err::HostResolutionError
+      rescue Curl::Err::HostResolutionError, Curl::Err::RecvError => e
+        puts "Curl Error: #{e.message}"
         nil
       end
     end
@@ -46,9 +47,13 @@ class Newrelic
       doc["threshold_value"]
     end
 
-    def get_value(agent_id, metric, field, start=Time.now.utc-20.minutes, finish=Time.now.utc-10.minutes)
-      name = URI.encode(metric)
-      Newrelic.get_json("https://api.newrelic.com/api/v1/agents/#{agent_id}/data.json?metrics[]=#{name}&field=#{field}&summary=1&begin=#{start.iso8601(0)}&end=#{finish.iso8601(0)}")
+    def get_value(agent_ids, metrics, field, start=(Time.now.utc-20.minutes).iso8601(0), finish=(Time.now.utc-10.minutes).iso8601(0))
+      agent_ids = [agent_ids] unless agent_ids.is_a?(Array)
+      metrics = [metrics] unless metrics.is_a?(Array)
+
+      agent_string = agent_ids.map { |r| "agent_id[]=#{r}" }.join('&')
+      metric_string = metrics.map { |r| "metrics[]=#{URI.encode(r)}" }.join('&')
+      Newrelic.get_json("https://api.newrelic.com/api/v1/accounts/#{account.id}/metrics/data.json?#{agent_string}&#{metric_string}&field=#{field}&summary=1&begin=#{start}&end=#{finish}")
     end
 
     def servers_url
