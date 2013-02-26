@@ -1,5 +1,5 @@
 <div class="conclusion">
-  Your application can handle <span class="rpm">--- RPM</span> before exhausting <span class="rpm">---</span> on <span class="rpm">____</span>
+  Your application can handle <span class="rpm"><%= @metrics.first.prediction.to_i %> RPM</span> before exhausting <span class="rpm"><%= @metrics.first.name %></span> on <span class="rpm"><%= @metrics.first.agent.hostname %></span>
 </div>
 
 <script>
@@ -30,8 +30,9 @@ var line = d3.svg.line()
 
 <% @metrics.each_with_index do |metric, index| %>
   <div class="metric">
-    <%= metric.name %>
-    <%= metric.agent.hostname %>
+    Name:<%= metric.name %><br />
+    Host:<%= metric.agent.hostname %><br />
+    Prediction:<%= metric.prediction %><br />
     <div id="graph-<%= index %>"></div>
 <script type="text/javascript">
   var svg = d3.select("#graph-<%= index %>").append("svg")

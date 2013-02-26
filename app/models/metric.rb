@@ -2,5 +2,5 @@ class Metric < ActiveRecord::Base
   belongs_to :agent
   has_many :samples
 
-  attr_accessor :points
+  attr_accessor :points, :prediction
 end
