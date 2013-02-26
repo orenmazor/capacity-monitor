@@ -46,6 +46,11 @@ class Newrelic
       doc["threshold_value"]
     end
 
+    def get_value(agent_id, metric, field, start=Time.now.utc-20.minutes, finish=Time.now.utc-10.minutes)
+      name = URI.encode(metric)
+      Newrelic.get_json("https://api.newrelic.com/api/v1/agents/#{agent_id}/data.json?metrics[]=#{name}&field=#{field}&summary=1&begin=#{start.iso8601(0)}&end=#{finish.iso8601(0)}")
+    end
+
     def servers_url
       "https://api.newrelic.com/api/v1/accounts/#{account.id}/servers.json"
     end
