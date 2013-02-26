@@ -8,6 +8,8 @@ class CapacityController < ApplicationController
     @metrics = @metrics[0..10]
   end
 
+  protected
+
   def build_samples
     @metrics = []
 
