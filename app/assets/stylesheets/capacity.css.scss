@@ -14,7 +14,9 @@ body { color:#49423D; background-color:#BCB77B; text-align:center; padding-top:2
   shape-rendering: crispEdges;
 }
 
-.area {
-  fill: steelblue;
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
 }
 
