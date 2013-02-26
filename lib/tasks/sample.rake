@@ -10,17 +10,10 @@ namespace :newrelic do
 
     times = metric.generate_sample
 
-    puts "times #{times}"
+    puts "returned #{times}"
+    start = times[0].iso8601(0)
+    finish = times[1].iso8601(0)
 
-    start = Time.parse(times[0])
-    finish = Time.parse(times[1])
-
-    finish, start = start, finish if finish < start
-
-    start = start.iso8601(0)
-    finish = finish.iso8601(0)
-
-    puts "start #{start} finish #{finish}"
     count = 0
 
     fields = NewrelicMetric.uniq.pluck(:field)

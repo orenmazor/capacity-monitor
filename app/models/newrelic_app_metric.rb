@@ -7,9 +7,16 @@ class NewrelicAppMetric < Metric
     sample = Sample.new
     sample.metric = self
     sample.value = fetch_value[field]
-    sample.fetched_at = fetch_value["begin_time"]
+
+    begin_time = Time.parse(fetch_value["begin_time"])
+    end_time = Time.parse(fetch_value["end_time"])
+
+    begin_time, end_time = end_time, begin_time if end_time < begin_time
+
+    sample.fetched_at = begin_time
     sample.save
-    [fetch_value["begin_time"], fetch_value["end_time"]]
+
+    [begin_time, end_time]
   end
 
 end
