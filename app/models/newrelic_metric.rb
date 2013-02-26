@@ -7,9 +7,7 @@ class NewrelicMetric < Metric
       return
     end
     value = raw[0][field]
-    if maximum
-      value /= maximum
-    end
+    value = maximum ? ((value.to_f / maximum.to_f) * 100) : value
 
     self.samples.create(:value => value, :fetched_at => start)
   end
