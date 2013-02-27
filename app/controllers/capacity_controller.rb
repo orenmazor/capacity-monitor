@@ -45,7 +45,7 @@ class CapacityController < ApplicationController
       Rails.logger.info "m #{m}, b #{b}, prediction is #{metric.prediction}"
 
     end
-    @metrics.reject! { |m| m.prediction < 0 || m.prediction.nan? }.sort_by! { |m| m.prediction }
+    @metrics.reject! { |m| m.nil? ||  m.prediction < 0 || m.prediction.nan? }.sort_by! { |m| m.prediction }
   end
 end
 
