@@ -7,8 +7,12 @@ class Agent < ActiveRecord::Base
     @@rules ||= YAML.load(File.read(Rails.root + 'config/agent_rules.yml'))
   end
 
+  def self.blacklist
+    @@blacklist ||= YAML.load(File.read(Rails.root + 'config/agent_blacklist.yml'))
+  end
+
   def self.match?(agent)
-    self.rules.detect { |r| agent =~ /#{r["pattern"]}/ }
+    self.rules.detect { |r| agent =~ /#{r["pattern"]}/ } && !self.blacklist.detect { |r| agent =~ /#{r["pattern"]}/ }
   end
 
   def fetch_metrics
