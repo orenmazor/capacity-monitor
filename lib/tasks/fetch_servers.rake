@@ -8,14 +8,13 @@ namespace :newrelic do
       puts "Impossible to fetch the list of servers: #{e}"
     end
 
-    fetched_at = Time.now.utc
     count = 0
 
     Agent.transaction do
       data.each do |hash|
         if (match = Agent.match?(hash['hostname'])) && !Agent.exists?(:agent_id => hash['id'])
-          agent = Agent.new(hostname: hash['hostname'], fetched_at: fetched_at)
-          agent.agent_id = hash['id']
+          agent = Agent.new(hostname: hash['hostname'])
+          agent.newrelic_id = hash['id']
           agent.role = match['role']
           agent.save
           count+=1
@@ -24,18 +23,6 @@ namespace :newrelic do
     end
 
     $stdout.puts "Imported #{count} hosts from newrelic"
-
-    app = Agent.new
-    app.agent_id = Newrelic.application.id
-    app.role = "Application"
-    app.fetched_at = fetched_at
-    app.save
-
-    rpm = NewrelicAppMetric.new
-    rpm.agent_id = app.id
-    rpm.name = "Throughput"
-    rpm.field = "metric_value"
-    rpm.save
 
     Agent.find_each do |agent|
       agent.sync_metrics

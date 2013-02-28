@@ -2,7 +2,7 @@ require 'test_helper'
 
 class MetricTest < ActiveSupport::TestCase
   def setup
-    @agent = Agent.new( :fetched_at => Time.now)
+    @agent = Agent.new
     @agent.id = 100
     @agent.save
 
@@ -19,7 +19,7 @@ class MetricTest < ActiveSupport::TestCase
   test "Metric can create samples" do
     @metric.save
     assert_difference "Sample.count", +1 do
-      @metric.samples.create(:value => 100, :fetched_at => Time.now.utc)
+      @metric.samples.create(:value => 100, :run => Run.create)
     end
   end
 end

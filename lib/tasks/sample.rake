@@ -5,27 +5,25 @@ namespace :newrelic do
 
     puts "Syncing metrics for agents..."
 
-    # get application-level metric, which also gives us a start and end time
-    metric = NewrelicAppMetric.first
+    start = Time.now.utc - 20.minutes
+    finish = Time.now.utc - 10.minutes
 
-    times = metric.generate_sample
+    run = Run.create(:start => start, :end => finish)
 
-    puts "returned #{times}"
-    start = times[0].iso8601(0)
-    finish = times[1].iso8601(0)
+    StatsD.generate_rpm_sample(run, start, finish)
 
     count = 0
 
     fields = NewrelicMetric.uniq.pluck(:field)
     fields.each do |field|
       metrics = Metric.uniq.where(["field = ?", field]).pluck(:name)
-      agent_ids = Metric.uniq.joins("LEFT OUTER JOIN agents ON agents.id = metrics.agent_id").where(["field = ?", field]).pluck("agents.agent_id").map { |r| r.to_s }
+      newrelic_ids = Metric.uniq.joins("LEFT OUTER JOIN agents ON agents.id = metrics.agent_id").where(["field = ?", field]).pluck("agents.newrelic_id")
 
-      agents = Agent.where(:agent_id => agent_ids)
+      agents = Agent.where(:newrelic_id => newrelic_ids)
 
       result = []
       metrics.each_slice(10) do |slice|
-        tmp = Newrelic.get_value(agent_ids, slice, field, start, finish) || []
+        tmp = Newrelic.get_value(newrelic_ids, slice, field, start, finish) || []
         if tmp.is_a? Array
           result += tmp
         else
@@ -40,13 +38,12 @@ namespace :newrelic do
         results_by_agent[r["agent_id"].to_i] << r
       end
 
-      puts "agents.count #{agents.count}"
       agents.each do |agent|
-        if results_by_agent[agent.agent_id.to_i]
+        if results_by_agent[agent.newrelic_id]
           agent.metrics.each do |metric|
-            sample = results_by_agent[agent.agent_id.to_i].detect { |res| res["name"] == metric.name }
-            if sample
-              metric.populate(sample, start)
+            value = results_by_agent[agent.newrelic_id].detect { |res| res["name"] == metric.name }
+            if value
+              metric.create_sample(value, run)
               count +=1
             end
           end
