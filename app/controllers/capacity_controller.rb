@@ -18,7 +18,7 @@ class CapacityController < ApplicationController
     app_samples_by_fetched = {}
     app_samples.each { |a| app_samples_by_fetched[a.fetched_at] = a }
 
-    NewrelicMetric.find_each do |metric|
+    NewrelicMetric.find_each(:include => :samples) do |metric|
       metric.points = []
       samples = metric.samples.order("fetched_at DESC").limit(10)
       samples.each do |sample|
@@ -45,7 +45,7 @@ class CapacityController < ApplicationController
       Rails.logger.info "m #{m}, b #{b}, prediction is #{metric.prediction}"
 
     end
-    @metrics.reject! { |m| m.prediction < 0 || m.prediction.nan? }.sort_by! { |m| m.prediction }
+    @metrics.reject! { |m| m.nil? ||  m.prediction < 0 || m.prediction.nan? }.sort_by! { |m| m.prediction }
   end
 end
 
