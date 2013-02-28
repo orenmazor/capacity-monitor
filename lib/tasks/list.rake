@@ -40,6 +40,11 @@ namespace :newrelic do
     metrics = Newrelic.get_metrics(ENV['AGENT'])
     metric = metrics.detect { |m| m["name"] =~ /#{name}/ }
 
+    if metric.nil?
+      puts "That metric doesn't exist"
+      return
+    end
+
     puts "Fields and values for #{name} on agent #{agent}"
     metric["fields"].each do |f|
       value = Newrelic.get_value(agent, metric["name"], f)
