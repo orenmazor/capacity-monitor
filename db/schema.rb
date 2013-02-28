@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130228003845) do
+ActiveRecord::Schema.define(:version => 20130228021939) do
 
   create_table "agents", :force => true do |t|
     t.integer  "newrelic_id"
@@ -20,14 +20,6 @@ ActiveRecord::Schema.define(:version => 20130228003845) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.string   "role"
-  end
-
-  create_table "facts", :force => true do |t|
-    t.string   "type"
-    t.string   "resource"
-    t.integer  "bucket_size"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
   end
 
   create_table "metrics", :force => true do |t|
@@ -41,12 +33,12 @@ ActiveRecord::Schema.define(:version => 20130228003845) do
   end
 
   create_table "samples", :force => true do |t|
-    t.integer  "owner_id"
+    t.integer  "metric_id"
     t.decimal  "value",      :precision => 14, :scale => 4
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.datetime "fetched_at"
-    t.string   "owner_type"
+    t.string   "type"
   end
 
 end

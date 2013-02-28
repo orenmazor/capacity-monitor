@@ -1,0 +1,2 @@
+class FactSample < Sample
+end
