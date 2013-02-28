@@ -4,11 +4,15 @@ class FactSampleTest < ActiveSupport::TestCase
 
   test "can be created" do
     sample = FactSample.new
-    sample.value = 1000
+    sample.value = 5001
     sample.run = Run.create
 
     assert_difference "FactSample.count", +1 do
       assert sample.save
     end
+
+    sample.reload
+
+    assert_equal 1, sample.bucket_number
   end
 end
