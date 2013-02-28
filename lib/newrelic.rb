@@ -6,7 +6,7 @@ class Newrelic
       @@account ||= NewRelicApi::Account.first
     end
 
-    mattr_accessor :application_name
+    mattr_accessor :application_name, :application, :account
 
     def application
       @@application ||= account.applications.detect { |a| a.name.downcase == application_name.downcase }

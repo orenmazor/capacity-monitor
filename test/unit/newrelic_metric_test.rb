@@ -14,7 +14,6 @@ class NewrelicMetricTest < ActiveSupport::TestCase
     metric.field = 'thing'
     metric.save
 
-
     start_time = Time.now.utc - 10.minutes
     finish_time = start_time + 1.hour
 

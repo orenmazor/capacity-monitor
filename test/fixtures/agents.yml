@@ -1,11 +1,9 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+appserver:
+  newrelic_id: 100
+  role: "Application Server"
+  hostname: "app.server.com"
 
-one:
-  agent_id: MyString
-  fetched_at: 2013-02-23 20:16:54
-  hostname: MyString
-
-two:
-  agent_id: MyString
-  fetched_at: 2013-02-23 20:16:54
-  hostname: MyString
+memcached:
+  newrelic_id: 101
+  role: "Memcached Server"
+  hostname: "memcache.server.com"

@@ -1,11 +1,11 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+app_cpu:
+  name: System/CPU/IO Wait/percent
+  field: average_value
+  agent: appserver
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+memcache_network:
+  name: System/Network/eth0/All/bytes/sec
+  field: max_per_second
+  maximum: 125000000
+  agent: memcached
+

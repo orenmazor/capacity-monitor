@@ -10,5 +10,10 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   fixtures :all
 
-  # Add more helper methods to be used by all tests here...
+  def mock_newrelic
+    Newrelic.application = stub(:id => 1234)
+    Newrelic.account = stub(:id => 456)
+  end
+
+  setup :mock_newrelic
 end

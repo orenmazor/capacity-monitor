@@ -6,4 +6,5 @@
   role: "Job Server"
 - pattern: "^memcache.*"
   role: "Memcache Server"
-
+- pattern: "^redis.*"
+  role: "Redis Server"
