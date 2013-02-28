@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130228023428) do
+ActiveRecord::Schema.define(:version => 20130228180721) do
 
   create_table "agents", :force => true do |t|
     t.integer  "newrelic_id"
@@ -25,10 +25,17 @@ ActiveRecord::Schema.define(:version => 20130228023428) do
     t.string   "name"
     t.string   "type"
     t.integer  "maximum"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.integer  "agent_id"
     t.string   "field"
+    t.text     "points_cache"
+    t.text     "trend"
+    t.text     "bottom_confidence"
+    t.text     "top_confidence"
+    t.integer  "ceiling"
+    t.float    "r_squared"
+    t.string   "guess"
   end
 
   create_table "runs", :force => true do |t|
