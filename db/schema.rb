@@ -55,5 +55,4 @@ ActiveRecord::Schema.define(:version => 20130228180721) do
     t.string   "type"
     t.integer  "run_id"
   end
-
 end
