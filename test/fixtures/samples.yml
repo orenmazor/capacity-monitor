@@ -1,11 +1,22 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+slowcpu:
+  type: MetricSample
+  metric: app_cpu
+  run: one
+  value: 10
 
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+lessrpm:
+  type: FactSample
+  run: one
+  value: 10000
+
+slowercpu:
+  type: MetricSample
+  run: two
+  metric: app_cpu
+  value: 20
+
+moarrpm:
+  type: FactSample
+  run: two
+  value: 20000
+

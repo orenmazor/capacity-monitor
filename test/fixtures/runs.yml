@@ -3,9 +3,7 @@
 one:
   begin: 2013-02-27 21:34:28
   end: 2013-02-27 21:34:28
-  failures: MyText
 
 two:
   begin: 2013-02-27 21:34:28
   end: 2013-02-27 21:34:28
-  failures: MyText
