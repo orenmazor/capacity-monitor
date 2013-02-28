@@ -11,11 +11,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130228021939) do
+ActiveRecord::Schema.define(:version => 20130228023428) do
 
   create_table "agents", :force => true do |t|
     t.integer  "newrelic_id"
-    t.datetime "fetched_at"
     t.string   "hostname"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -32,6 +31,14 @@ ActiveRecord::Schema.define(:version => 20130228021939) do
     t.string   "field"
   end
 
+  create_table "runs", :force => true do |t|
+    t.datetime "begin"
+    t.datetime "end"
+    t.text     "failures"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "samples", :force => true do |t|
     t.integer  "metric_id"
     t.decimal  "value",      :precision => 14, :scale => 4
@@ -39,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20130228021939) do
     t.datetime "updated_at",                                :null => false
     t.datetime "fetched_at"
     t.string   "type"
+    t.integer  "run_id"
   end
 
 end
