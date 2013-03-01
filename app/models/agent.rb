@@ -12,7 +12,8 @@ class Agent < ActiveRecord::Base
   end
 
   def self.match?(agent)
-    self.rules.detect { |r| agent =~ /#{r["pattern"]}/ } && !self.blacklist.detect { |r| agent =~ /#{r["pattern"]}/ }
+    rule = self.rules.detect { |r| agent =~ /#{r["pattern"]}/ } 
+    return rule if rule && !self.blacklist.detect { |r| agent =~ /#{r["pattern"]}/ }
   end
 
   def fetch_metrics
