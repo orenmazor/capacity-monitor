@@ -2,6 +2,8 @@
   Your application can handle <span class="rpm"><%= @metrics.first.prediction.to_i %> RPM</span> before exhausting <span class="rpm"><%= @metrics.first.name %></span> on <span class="rpm"><%= @metrics.first.agent.hostname %></span>
 </div>
 
+<br /><br /><br />
+
 <script>
 var margin = {top: 20, right: 20, bottom: 30, left: 50},
     width = 480 - margin.left - margin.right,
@@ -38,7 +40,7 @@ var line = d3.svg.line()
   <div class="metric">
     Name:<%= metric.name %><br />
     Host:<%= metric.agent.hostname %><br />
-    Prediction:<%= metric.prediction %><br />
+    Prediction:<%= metric.prediction.to_i %><br />
     <div id="graph-<%= index %>"></div>
 <script type="text/javascript">
   var svg = d3.select("#graph-<%= index %>").append("svg")
@@ -47,8 +49,8 @@ var line = d3.svg.line()
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  points = <%= metric.points.to_json %>
-  best_fit = <%= metric.best_fit.to_json %>
+  points = <%= metric.points %>
+  best_fit = <%= metric.best_fit %>
 
   x.domain(d3.extent(points, function(d) { return d[0]; }));
   y.domain([0, d3.max(points, function(d) { return d[1]; })]);

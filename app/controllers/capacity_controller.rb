@@ -2,39 +2,13 @@ class CapacityController < ApplicationController
   attr_accessor :metrics
 
   def index
-    build_samples
-    predict
-
-    @metrics = @metrics[0..10]
+    @metrics = Metric.where("prediction > 0 AND slope > 0").order("prediction ASC").limit(20)
   end
 
   protected
 
   def build_samples
     @metrics = []
-
-    @app_metric = NewrelicAppMetric.first
-    app_samples = @app_metric.samples
-    app_samples_by_fetched = {}
-    app_samples.each { |a| app_samples_by_fetched[a.fetched_at] = a }
-
-    NewrelicMetric.find_each(:include => :samples) do |metric|
-      metric.points = []
-      samples = metric.samples.order("fetched_at DESC").limit(10)
-      samples.each do |sample|
-        metric.points << [sample.value.to_f, app_samples_by_fetched[sample.fetched_at].value.to_f] if app_samples_by_fetched[sample.fetched_at]
-      end
-      if metric.points.count > 1
-        metric.points.sort_by! { |p| p[0] }
-        @metrics << metric
-      end
-    end
-  end
-
-  def predict
-    @metrics.each { |metric| metric.predict }
-            .reject! { |m| m.nil? ||  m.prediction < 0 || m.prediction.nan? }
-            .sort_by! { |m| m.prediction }
   end
 end
 
