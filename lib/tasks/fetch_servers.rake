@@ -12,7 +12,7 @@ namespace :newrelic do
 
     Agent.transaction do
       data.each do |hash|
-        if (match = Agent.match?(hash['hostname'])) && !Agent.exists?(:agent_id => hash['id'])
+        if (match = Agent.match?(hash['hostname'])) && !Agent.exists?(:newrelic_id => hash['id'])
           agent = Agent.new(hostname: hash['hostname'])
           agent.newrelic_id = hash['id']
           agent.role = match['role']
