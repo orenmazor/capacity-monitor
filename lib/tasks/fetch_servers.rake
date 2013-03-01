@@ -25,7 +25,7 @@ namespace :newrelic do
     $stdout.puts "Imported #{count} hosts from newrelic"
 
     Agent.find_each do |agent|
-      puts "."
+      print "."
       agent.sync_metrics
     end
   end
