@@ -10,21 +10,27 @@ class StatsD
   end
 
   def self.password
-    ENV['STATSD_PASSWORD']
+    ENV['STATSD_PASS']
   end
 
   def self.rpm_namespace
     ENV['STATSD_RPM_NAMESPACE']
   end
 
+  def self.get_rpm_average(start, finish)
+    period = "from=#{start.to_i}&until=#{finish.to_i}"
+    points = self.history(self.rpm_namespace, period)
+    average = (points.sum{ |p| p[:y] } / points.count) * 1000
+  end
+
   def self.api_call(url)
     conn = Faraday.new(self.url, :ssl => {:verify => false})
-    conn.basic_auth(USER, PASS)
+    conn.basic_auth(self.user, self.password)
     JSON.parse(conn.get(url).body)[0]
   end
 
-  def self.history(metric, window = "-1hours") 
-    json = api_call("/render/?from=#{window}&target=#{metric}&format=json")
+  def self.history(metric, period)
+    json = api_call("/render/?#{period}&target=#{metric}&format=json")
     set = json['datapoints'].collect do |point|
       next if point[0].nil?
       {x: point[1], y: point[0]}
