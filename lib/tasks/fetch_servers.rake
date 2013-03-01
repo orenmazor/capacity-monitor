@@ -28,5 +28,6 @@ namespace :newrelic do
       print "."
       agent.sync_metrics
     end
+    puts ""
   end
 end
