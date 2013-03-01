@@ -4,7 +4,11 @@ namespace :newrelic do
   task :sample => [:environment] do
 
     start = Time.now.utc - 20.minutes
-    finish = Time.now.utc - 10.minutes
+    if ENV['START_TIME']
+      start = Time.parse(ENV['START_TIME'])
+    end
+
+    finish = start + 10.minutes
 
     run = Run.create(:begin => start, :end => finish)
 
