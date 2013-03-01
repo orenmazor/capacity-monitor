@@ -22,4 +22,21 @@ class MetricTest < ActiveSupport::TestCase
       @metric.samples.create(:value => 100, :run => Run.create)
     end
   end
+
+  test "Metric can curve fit" do
+    metric = metrics(:app_cpu)
+    fact_samples = FactSample.order("id ASC")
+
+    metric.curve_fit(fact_samples)
+    assert metric.slope > 999 && metric.slope < 1001
+    assert metric.offset > -1 && metric.offset < 1
+  end
+
+  test "Metric knows when it's irrelevant" do
+    metric = metrics(:disk)
+    fact_samples = FactSample.order("id ASC")
+
+    metric.curve_fit(fact_samples)
+
+  end
 end

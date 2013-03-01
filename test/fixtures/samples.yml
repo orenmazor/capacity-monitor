@@ -4,6 +4,12 @@ slowcpu:
   run: one
   value: 10
 
+diskone:
+  type: MetricSample
+  metric: disk
+  run: one
+  value: 20
+
 lessrpm:
   type: FactSample
   run: one
@@ -20,3 +26,8 @@ moarrpm:
   run: two
   value: 20000
 
+disktwo:
+  type: MetricSample
+  metric: disk
+  run: two
+  value: 20

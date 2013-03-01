@@ -9,3 +9,7 @@ memcache_network:
   maximum: 125000000
   agent: memcached
 
+disk:
+  name: System/Disk/dev^sd0/Reads/Utilization/percent
+  agent: appserver
+  field: average_value
