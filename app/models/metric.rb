@@ -6,8 +6,6 @@ class Metric < ActiveRecord::Base
   has_many :metric_samples
   alias :samples :metric_samples
 
-  attr_accessor :points
-
   def reverse(points)
     points.map { |point| point.reverse }
   end
@@ -35,6 +33,9 @@ class Metric < ActiveRecord::Base
 
     self.slope, self.offset = regression(x, y, 1)
     predict
+    points = []
+    x.each_with_index { |v, i| points << [v, y[i]] }
+    self.points = points.to_json
   end
 
   def predict

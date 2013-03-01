@@ -3,14 +3,14 @@ namespace :newrelic do
   desc "sample metrics from newrelic"
   task :sample => [:environment] do
 
-    puts "Syncing metrics for agents..."
-
     start = Time.now.utc - 20.minutes
     finish = Time.now.utc - 10.minutes
 
     run = Run.create(:begin => start, :end => finish)
 
     rpm = StatsD.get_rpm_average(start, finish)
+
+    puts "run #{run.id}, rpm from StatsD = #{rpm}"
 
     FactSample.create(:run => run, :value => rpm)
 
@@ -27,6 +27,7 @@ namespace :newrelic do
 
       result = []
       metrics.each_slice(10) do |slice|
+        puts "."
         tmp = Newrelic.get_value(newrelic_ids, slice, field, start.iso8601(0), finish.iso8601(0))
         if tmp.is_a? Array
           result += tmp

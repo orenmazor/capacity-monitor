@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20130301163458) do
     t.float    "offset"
     t.float    "prediction"
     t.text     "best_fit"
+    t.text     "points"
   end
 
   create_table "runs", :force => true do |t|
@@ -48,7 +49,6 @@ ActiveRecord::Schema.define(:version => 20130301163458) do
     t.decimal  "value",         :precision => 14, :scale => 4
     t.datetime "created_at",                                   :null => false
     t.datetime "updated_at",                                   :null => false
-    t.datetime "fetched_at"
     t.string   "type"
     t.integer  "run_id"
     t.integer  "bucket_number"
