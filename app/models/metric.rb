@@ -3,20 +3,9 @@ require 'matrix'
 class Metric < ActiveRecord::Base
   belongs_to :agent
 
-  has_many :samples
+  has_many :metric_samples
 
   attr_accessor :points, :prediction, :best_fit
-
-  def generate_points(fact_samples)
-    run_ids = fact_samples.map(&:run_id)
-
-    smpls = samples.where(["run_id in (?)", run_ids]).order("id ASC")
-    points = []
-
-    smpls.each do |sample|
-      points << [fact_samples_by_run_id[sample.run_id].value, sample.value]
-    end
-  end
 
   def reverse(points)
     points.map { |point| point.reverse }
