@@ -4,7 +4,7 @@
   field: "average_value"
 - pattern: "System/CPU/.*/percent"
   field: "average_value"
-- pattern: "System/Network/.*/All/bytes/sec"
+- pattern: "System/Network/All/All/bytes/sec"
   field: "max_per_second"
   maximum: 125000000
 
