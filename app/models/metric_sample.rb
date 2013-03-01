@@ -3,6 +3,6 @@ class MetricSample < Sample
 
   before_save :normalize_value
   def normalize_value
-    value = metric.maximum ? ((value.to_f / metric.maximum.to_f) * 100) : value
+    self.value = metric.maximum ? ((value.to_f / metric.maximum.to_f) * 100) : value
   end
 end

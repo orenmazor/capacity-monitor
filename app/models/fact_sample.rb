@@ -9,6 +9,6 @@ class FactSample < Sample
   private
 
   def calculate_bucket_number
-    write_attribute(:bucket_number, value.to_f.ceil / BUCKET_SIZE)
+    self.bucket_number = value.to_f.ceil / BUCKET_SIZE
   end
 end
