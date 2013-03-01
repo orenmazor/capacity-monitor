@@ -32,20 +32,9 @@ class CapacityController < ApplicationController
   end
 
   def predict
-    @metrics.each do |metric|
-      first = metric.points.first
-      last = metric.points.last
-      # rise / run
-      m = (last[1] - first[1]) / (last[0] - first[0])
-
-      # y = mx + b
-      b = first[1] - (m*first[0])
-      metric.prediction = ((m * 100.0) + b)
-      metric.best_fit = [[0, b], [100, metric.prediction]]
-      Rails.logger.info "m #{m}, b #{b}, prediction is #{metric.prediction}"
-
-    end
-    @metrics.reject! { |m| m.nil? ||  m.prediction < 0 || m.prediction.nan? }.sort_by! { |m| m.prediction }
+    @metrics.each { |metric| metric.predict }
+            .reject! { |m| m.nil? ||  m.prediction < 0 || m.prediction.nan? }
+            .sort_by! { |m| m.prediction }
   end
 end
 

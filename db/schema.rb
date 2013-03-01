@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130228204822) do
+ActiveRecord::Schema.define(:version => 20130301163458) do
 
   create_table "agents", :force => true do |t|
     t.integer  "newrelic_id"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(:version => 20130228204822) do
     t.string   "field"
     t.float    "slope"
     t.float    "offset"
+    t.float    "prediction"
+    t.text     "best_fit"
   end
 
   create_table "runs", :force => true do |t|

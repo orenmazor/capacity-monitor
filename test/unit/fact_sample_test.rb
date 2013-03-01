@@ -19,4 +19,5 @@ class FactSampleTest < ActiveSupport::TestCase
   test "fixtures loaded" do
     assert_equal 2, FactSample.count
   end
+
 end

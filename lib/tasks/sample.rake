@@ -38,6 +38,7 @@ namespace :newrelic do
       results_by_agent = {}
 
       result.each do |r|
+        next if r["value"] == 0
         results_by_agent[r["agent_id"].to_i] ||= []
         results_by_agent[r["agent_id"].to_i] << r
       end
@@ -45,9 +46,9 @@ namespace :newrelic do
       agents.each do |agent|
         if results_by_agent[agent.newrelic_id]
           agent.metrics.each do |metric|
-            value = results_by_agent[agent.newrelic_id].detect { |res| res["name"] == metric.name }
-            if value
-              metric.metric_samples.create(:value => value, :run => run)
+            raw = results_by_agent[agent.newrelic_id].detect { |res| res["name"] == metric.name }
+            if raw
+              metric.metric_samples.create(:value => raw[field], :run => run)
               count +=1
             end
           end

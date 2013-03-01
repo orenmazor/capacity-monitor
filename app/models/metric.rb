@@ -4,8 +4,9 @@ class Metric < ActiveRecord::Base
   belongs_to :agent
 
   has_many :metric_samples
+  alias :samples :metric_samples
 
-  attr_accessor :points, :prediction, :best_fit
+  attr_accessor :points
 
   def reverse(points)
     points.map { |point| point.reverse }
@@ -17,7 +18,7 @@ class Metric < ActiveRecord::Base
     x = []
 
     run_ids.each_with_index do |run, i|
-      val = samples.detect { |s| s.run_id == run }.value
+      val = metric_samples.detect { |s| s.run_id == run }.try(:value)
       if val.nil? || x.detect { |v| v == val }
         y.delete_at(i)
       else
@@ -33,6 +34,12 @@ class Metric < ActiveRecord::Base
     end
 
     self.slope, self.offset = regression(x, y, 1)
+    predict
+  end
+
+  def predict
+    self.prediction = ((self.slope * 100.0) + self.offset)
+    self.best_fit = [[0, self.offset], [100, self.prediction]].to_json
   end
 
   def relevant?
