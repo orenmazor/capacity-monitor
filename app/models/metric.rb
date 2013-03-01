@@ -10,27 +10,35 @@ class Metric < ActiveRecord::Base
     points.map { |point| point.reverse }
   end
 
-  def curve_fit(fact_samples)
+  def generate_points(fact_samples)
     y = fact_samples.map { |v| v.value.to_f }
     run_ids = fact_samples.map(&:run_id)
     x = []
 
     run_ids.each_with_index do |run, i|
-      val = metric_samples.detect { |s| s.run_id == run }.try(:value)
-      if val.nil? || x.detect { |v| v == val }
-        y.delete_at(i)
-      else
-        x << val
+      x << metric_samples.detect { |s| s.run_id == run }.try(:value)
+    end
+
+    index = x.length-1
+    x.reverse_each do |v|
+      if v.nil?
+        x.delete_at(index)
+        y.delete_at(index)
       end
+      index -= 1
     end
 
     x.map! { |v| v.to_f }
+    [x, y]
+  end
 
-    if x.uniq.count != y.uniq.count || x.uniq.count == 1
+  def curve_fit(fact_samples)
+    x, y = generate_points(fact_samples)
+
+    if x.count != y.count || x.uniq.count == 1
       self.slope = self.offset = 0
       return
     end
-
     self.slope, self.offset = regression(x, y, 1)
     predict
     points = []
