@@ -3,15 +3,10 @@ require 'test_helper'
 class FactSampleTest < ActiveSupport::TestCase
 
   test "can be created" do
-    sample = FactSample.new
-    sample.value = 5001
-    sample.run = Run.create
-
+    sample = nil
     assert_difference "FactSample.count", +1 do
-      assert sample.save
+      sample = FactSample.create(:run => Run.create, :value => 5001)
     end
-
-    sample.reload
 
     assert_equal 1, sample.bucket_number
   end
