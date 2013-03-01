@@ -20,7 +20,7 @@ class StatsD
   def self.get_rpm_average(start, finish)
     period = "from=#{start.to_i}&until=#{finish.to_i}"
     points = self.history(self.rpm_namespace, period)
-    average = (points.sum{ |p| p[:y] } / points.count) * 1000
+    average = (points.sum{ |p| p[:y] } / points.count) * 10.0 * 60
   end
 
   def self.api_call(url)
