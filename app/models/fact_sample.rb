@@ -3,7 +3,9 @@ class FactSample < Sample
   before_save :calculate_bucket_number
 
   def self.find_latest_values_and_run_ids_per_bucket
-    select('value, MAX(run_id) AS run_id').group([:bucket_number, :value])
+    sql = "SELECT * FROM samples WHERE type = 'FactSample' AND run_id IN 
+      (SELECT  MAX(run_id) as run_id FROM  samples WHERE type = 'FactSample' GROUP BY bucket_number)"
+    find_by_sql(sql)
   end
 
   private
