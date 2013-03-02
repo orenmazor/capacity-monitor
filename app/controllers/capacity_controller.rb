@@ -2,7 +2,8 @@ class CapacityController < ApplicationController
   attr_accessor :metrics
 
   def index
-    @metrics = Metric.where("prediction > 0 AND slope > 0").order("prediction ASC").limit(20)
+    @metrics = Metric.where("prediction > 0 AND slope > 0").order("prediction ASC")
+    @metrics.reject! { |m| !m.relevant? }
   end
 
   protected

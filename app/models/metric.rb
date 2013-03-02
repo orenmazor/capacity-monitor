@@ -1,6 +1,8 @@
 require 'matrix'
 
 class Metric < ActiveRecord::Base
+  RELEVANCE_THRESHOLD = 5
+
   belongs_to :agent
 
   has_many :metric_samples
@@ -52,7 +54,10 @@ class Metric < ActiveRecord::Base
   end
 
   def relevant?
-    self.slope <= 0
+    max_sample = self.samples.max { |v| v.value}.try(:value)
+    min_sample = self.samples.min { |v| v.value}.try(:value)
+    puts "slope #{self.slope} max #{max_sample} min #{min_sample} relevance #{max_sample - min_sample}"
+    self.slope > 0 && (max_sample.to_f-min_sample.to_f) > RELEVANCE_THRESHOLD
   end
 
 private
