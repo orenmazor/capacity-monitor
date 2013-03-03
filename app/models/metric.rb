@@ -1,7 +1,7 @@
 require 'matrix'
 
 class Metric < ActiveRecord::Base
-  RELEVANCE_THRESHOLD = 5
+  RELEVANCE_THRESHOLD = 2
 
   belongs_to :agent
 
