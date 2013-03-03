@@ -62,5 +62,10 @@ namespace :newrelic do
     end
 
     $stdout.puts "Generated #{count} samples from newrelic"
+
+    Metric.find_each do |metric|
+      metric.update_relevance
+      metric.save
+    end
   end
 end

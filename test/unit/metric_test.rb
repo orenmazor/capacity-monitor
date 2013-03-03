@@ -34,9 +34,11 @@ class MetricTest < ActiveSupport::TestCase
 
   test "Metric knows when it's irrelevant" do
     metric = metrics(:disk)
-    fact_samples = FactSample.order("id ASC")
+    metric.update_relevance
+    assert !metric.relevant
 
-    metric.curve_fit(fact_samples)
-
+    metric = metrics(:app_cpu)
+    metric.update_relevance
+    assert metric.relevant
   end
 end

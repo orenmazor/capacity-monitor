@@ -6,11 +6,8 @@ class CapacityController < ApplicationController
   end
 
   def data
-    @metrics = Metric.where("prediction > 0 AND slope > 0").order("prediction ASC")
-    @metrics.reject! { |m| !m.relevant? }
-
     count = -1
-    @metrics = @metrics.map do |m|
+    @metrics = predict.map do |m|
       count += 1
       {
         :name => m.name,
@@ -21,13 +18,24 @@ class CapacityController < ApplicationController
         :index => count
       }
     end
-    respond_with [{}] + @metrics
+
+    respond_with [@metrics.first] + @metrics
   end
 
   protected
 
-  def build_samples
-    @metrics = []
+  def predict
+    metrics = []
+    values_and_run_ids = FactSample.find_latest_values_and_run_ids_per_bucket
+
+    Metric.where(:relevant => true).find_each do |metric|
+      metric.curve_fit(values_and_run_ids)
+      if metric.predict
+        metrics << metric
+      end
+    end
+
+    metrics.sort_by { |v| v.prediction }
   end
 end
 

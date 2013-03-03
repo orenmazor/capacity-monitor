@@ -4,6 +4,7 @@ class Metric < ActiveRecord::Base
   RELEVANCE_THRESHOLD = 2
 
   belongs_to :agent
+  attr_accessor :slope, :offset, :points, :best_fit, :prediction
 
   has_many :metric_samples
   alias :samples :metric_samples
@@ -51,13 +52,17 @@ class Metric < ActiveRecord::Base
   def predict
     self.prediction = ((self.slope * 100.0) + self.offset)
     self.best_fit = [[0, self.offset], [100, self.prediction]].to_json
+    self.slope > 0 && self.prediction > 0
   end
 
-  def relevant?
-    max_sample = self.samples.max { |v| v.value}.try(:value)
-    min_sample = self.samples.min { |v| v.value}.try(:value)
-    puts "slope #{self.slope} max #{max_sample} min #{min_sample} relevance #{max_sample - min_sample}"
-    self.slope > 0 && (max_sample.to_f-min_sample.to_f) > RELEVANCE_THRESHOLD
+  def update_relevance
+    if samples.count < 2
+      self.relevant = false
+    else
+      sql = "SELECT MAX(value), MIN(value) FROM samples WHERE metric_id = #{id}"
+      max, min = ActiveRecord::Base.connection.select_rows(sql).first
+      self.relevant = (max.to_f-min.to_f > RELEVANCE_THRESHOLD)
+    end
   end
 
 private
