@@ -19,7 +19,7 @@ class CapacityController < ApplicationController
       }
     end
 
-    respond_with [@metrics.first] + @metrics
+    respond_with @metrics
   end
 
   protected

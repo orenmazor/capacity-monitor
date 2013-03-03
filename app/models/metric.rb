@@ -38,7 +38,7 @@ class Metric < ActiveRecord::Base
   def curve_fit(fact_samples)
     x, y = generate_points(fact_samples)
 
-    if x.count != y.count || x.uniq.count == 1
+    if x.count != y.count || x.uniq.count < 2
       self.slope = self.offset = 0
       return
     end

@@ -14,6 +14,7 @@ lessrpm:
   type: FactSample
   run: one
   value: 10000
+  bucket_number: 2
 
 slowercpu:
   type: MetricSample
@@ -25,6 +26,7 @@ moarrpm:
   type: FactSample
   run: two
   value: 20000
+  bucket_number: 4
 
 disktwo:
   type: MetricSample
