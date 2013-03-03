@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-body { color:#49423D; background-color:#BCB77B; text-align:center; padding-top:20px; }
+body { color:#232323; background-color:#dedede; text-align:center; padding-top:20px; }
 
 .conclusion { font-size:20px; }
 .rpm {font-size:140%;}
@@ -18,5 +18,11 @@ body { color:#49423D; background-color:#BCB77B; text-align:center; padding-top:2
   fill: none;
   stroke: steelblue;
   stroke-width: 1.5px;
+}
+
+.metric {
+  text-align:left;
+  padding-left: 15px;
+  padding-top: 15px;
 }
 

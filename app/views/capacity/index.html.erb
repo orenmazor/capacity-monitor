@@ -1,12 +1,12 @@
 <div class="conclusion">
-  Your application can handle <span class="rpm"><%= @metrics.first.prediction.to_i %> RPM</span> before exhausting <span class="rpm"><%= @metrics.first.name %></span> on <span class="rpm"><%= @metrics.first.agent.hostname %></span>
+  <span class="rpm"><%= @metrics.first.agent.hostname %></span> will exhaust <span class="rpm"><%= @metrics.first.name %></span> at <span class="rpm"><%= @metrics.first.prediction.to_i %> RPM</span>.
 </div>
 
 <br /><br /><br />
 
 <script>
 var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 480 - margin.left - margin.right,
+    width = 400 - margin.left - margin.right,
     height = 250 - margin.top - margin.bottom;
 
 var x = d3.scale.linear()
@@ -30,18 +30,23 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var line = d3.svg.line()
-    .x(function(d) { return path_x(d[0]); })
-    .y(function(d) { return path_y(d[1]); });
+    .x(function(d) { return x(d[0]); })
+    .y(function(d) { return y(d[1]); });
 
 </script>
 
 
 <% @metrics.each_with_index do |metric, index| %>
-  <div class="metric">
+<div class="row">
+  <div class="metric span4">
     Name:<%= metric.name %><br />
     Host:<%= metric.agent.hostname %><br />
     Prediction:<%= metric.prediction.to_i %><br />
-    <div id="graph-<%= index %>"></div>
+  </div>
+  <div id="graph-<%= index %>" class="span8"></div>
+</div>
+
+
 <script type="text/javascript">
   var svg = d3.select("#graph-<%= index %>").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -49,21 +54,23 @@ var line = d3.svg.line()
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  points = <%= metric.points %>
-  best_fit = <%= metric.best_fit %>
+    points = <%= metric.points %>
+    fit = <%= metric.best_fit %>
 
-  x.domain(d3.extent(points, function(d) { return d[0]; }));
+  x.domain([0, d3.max(points, function(d) { return d[0]; })]);
   y.domain([0, d3.max(points, function(d) { return d[1]; })]);
 
-  svg.append("path")
-      .datum(best_fit)
+  svg.append("line")
       .attr("class", "line")
-      .attr("d", line);
+      .attr("x1", function(d) { return x(fit[0][0]); })
+      .attr("y1", function(d) { return y(fit[0][1]); })
+      .attr("x2", function(d) { return x(fit[1][0]); })
+      .attr("y2", function(d) { return y(fit[1][1]); });
 
   svg.selectAll("dot")
      .data(points)
      .enter().append("circle")
-     .attr("r", 3.5)
+     .attr("r", 2.5)
      .attr("cx", function(d) { return x(d[0]); })
      .attr("cy", function(d) { return y(d[1]); });
 
