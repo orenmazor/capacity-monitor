@@ -44,7 +44,7 @@ class CapacityController < ApplicationController
 
     values_and_run_ids = FactSample.find_latest_values_and_run_ids_per_bucket(start_run, end_run)
 
-    Metric.where(:relevant => true).find_each do |metric|
+    Metric.where(:relevant => true).includes(:metric_samples).includes(:agent).find_each do |metric|
       metric.curve_fit(values_and_run_ids)
       if metric.predict
         metrics << metric
