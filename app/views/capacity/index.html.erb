@@ -82,7 +82,7 @@ var line = d3.svg.line()
     $('#graphs').append(['<div class="row">',
       '<div class="metric span4">',
         'Name: ' + data.name + '<br />',
-        'Host: ' + data.host + '<br />',
+        'Host: <a href="https://rpm.newrelic.com/accounts/<%= Newrelic.account.try(:id)%>/servers/' + data.agent_id + '">' + data.host + '</a><br />',
         'Prediction: ' + data.prediction + ' <br />',
       '</div>',
       '<div id="graph-' + data.index + '" class="span8"></div>',

@@ -3,7 +3,11 @@ require 'xmlsimple'
 class Newrelic
   class << self
     def account
-      @@account ||= NewRelicApi::Account.first
+      @@account ||= begin
+                      NewRelicApi::Account.first
+                    rescue
+                      nil
+                    end
     end
 
     mattr_accessor :application_name

@@ -18,6 +18,7 @@ class CapacityController < ApplicationController
         :prediction => m.prediction.to_i,
         :points => JSON.parse(m.points),
         :best_fit => JSON.parse(m.best_fit),
+        :agent_id => m.agent.newrelic_id,
         :index => count
       }
     end
