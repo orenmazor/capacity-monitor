@@ -8,3 +8,5 @@
   role: "Memcache Server"
 - pattern: "^redis.*"
   role: "Redis Server"
+- pattern: "search"
+  role: "Search Server"
