@@ -2,9 +2,11 @@ class FactSample < Sample
   BUCKET_SIZE = 5000
   before_save :calculate_bucket_number
 
-  def self.find_latest_values_and_run_ids_per_bucket
+  def self.find_latest_values_and_run_ids_per_bucket(start_run, end_run)
     sql = "SELECT * FROM samples WHERE type = 'FactSample' AND run_id IN 
-      (SELECT  MAX(run_id) as run_id FROM  samples WHERE type = 'FactSample' GROUP BY bucket_number)"
+      (SELECT MAX(run_id) as run_id FROM samples WHERE type = 'FactSample' 
+       AND run_id >= #{start_run} AND run_id <= #{end_run} GROUP BY bucket_number)"
+
     find_by_sql(sql)
   end
 

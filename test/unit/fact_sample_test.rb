@@ -10,9 +10,4 @@ class FactSampleTest < ActiveSupport::TestCase
 
     assert_equal 1, sample.bucket_number
   end
-
-  test "fixtures loaded" do
-    assert_equal 2, FactSample.count
-  end
-
 end

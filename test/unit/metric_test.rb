@@ -28,8 +28,8 @@ class MetricTest < ActiveSupport::TestCase
     fact_samples = FactSample.order("id ASC")
 
     metric.curve_fit(fact_samples)
-    assert metric.slope > 999 && metric.slope < 1001
-    assert metric.offset > -1 && metric.offset < 1
+    assert metric.slope > 461 && metric.slope < 462
+    assert metric.offset > 7692 && metric.offset < 7693
   end
 
   test "Metric knows when it's irrelevant" do

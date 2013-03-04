@@ -1,35 +1,53 @@
 slowcpu:
   type: MetricSample
   metric: app_cpu
-  run: one
+  run_id: 1000
   value: 10
 
 diskone:
   type: MetricSample
   metric: disk
-  run: one
+  run_id: 1000
   value: 20
 
 lessrpm:
   type: FactSample
-  run: one
+  run_id: 1000
   value: 10000
   bucket_number: 2
 
 slowercpu:
   type: MetricSample
-  run: two
+  run_id: 1001
   metric: app_cpu
   value: 20
 
 moarrpm:
   type: FactSample
-  run: two
+  run_id: 1001
   value: 20000
   bucket_number: 4
 
 disktwo:
   type: MetricSample
   metric: disk
-  run: two
+  run_id: 1001
+  value: 20
+
+cpu3:
+  type: MetricSample
+  run_id: 1002
+  metric: app_cpu
+  value: 50
+
+rpm3:
+  type: FactSample
+  run_id: 1002
+  value: 30000
+  bucket_number: 6
+
+disk3:
+  type: MetricSample
+  metric: disk
+  run_id: 1002
   value: 20

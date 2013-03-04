@@ -1,9 +1,16 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  begin: 2013-02-27 21:34:28
-  end: 2013-02-27 21:34:28
+  id: 1000
+  begin: 2013-02-27 21:34:28 -0000
+  end: 2013-02-27 21:54:28 -0000
 
 two:
-  begin: 2013-02-27 21:34:28
-  end: 2013-02-27 21:34:28
+  id: 1001
+  begin: 2013-02-28 21:34:28 -0000
+  end: 2013-02-28 21:54:28 -0000
+
+three:
+  id: 1002
+  begin: 2013-02-29 21:34:28 -0000
+  end: 2013-02-29 21:54:28 -0000
