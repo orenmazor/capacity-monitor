@@ -1,4 +1,6 @@
 - pattern: "stats"
 - pattern: "staging"
 - pattern: "tier2"
+- pattern: "warehouse"
+- pattern: "reportcenter"
 
