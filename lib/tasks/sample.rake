@@ -1,22 +1,43 @@
 
 namespace :newrelic do
+
   desc "sample metrics from newrelic"
   task :sample => [:environment] do
-
-    start = Time.now.utc - 20.minutes
+    start = Time.now.utc - 30.minutes
     if ENV['START_TIME']
       start = Time.parse(ENV['START_TIME'])
     end
 
-    finish = start + 10.minutes
+    sample(start, start + 20.minutes)
+    update_relevance
+  end
 
-    run = Run.create(:begin => start, :end => finish)
+  task :backfill => [:environment] do
+    raise "Run with START='1.month.ago' or similar" unless ENV["START"]
+
+    start = eval(ENV['START'])
+
+    while start < Time.now
+      sample(start, start + 20.minutes)
+      start += 1.hour
+    end
+    update_relevance
+  end
+
+  def sample(start, finish)
 
     rpm = StatsD.get_rpm_average(start, finish)
+    newrelic_rpm = Newrelic.get_value(Newrelic.application.id, "HttpDispatcher", "requests_per_minute", start.iso8601(0), finish.iso8601(0))[0]["requests_per_minute"]
 
-    puts "run #{run.id}, rpm from StatsD = #{rpm}"
+    puts "Sampling #{start}, RPM from StatsD = #{rpm}, NewRelic RPM = #{newrelic_rpm}, diff #{rpm - newrelic_rpm}"
+    if newrelic_rpm == 0
+      puts "Newrelic RPM = 0, skipping."
+      return
+    end
 
-    FactSample.create(:run => run, :value => rpm)
+    run = Run.create(:begin => start, :end => finish)
+    puts "Sampling for run #{run.id}"
+    FactSample.create(:run => run, :value => newrelic_rpm)
 
     count = 0
 
@@ -31,7 +52,7 @@ namespace :newrelic do
 
       result = []
       metrics.each_slice(10) do |slice|
-        puts "."
+        print "."
         tmp = Newrelic.get_value(newrelic_ids, slice, field, start.iso8601(0), finish.iso8601(0))
         if tmp.is_a? Array
           result += tmp
@@ -63,6 +84,9 @@ namespace :newrelic do
 
     $stdout.puts "Generated #{count} samples from newrelic"
 
+  end
+
+  def update_relevance
     Metric.find_each do |metric|
       metric.update_relevance
       metric.save
