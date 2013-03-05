@@ -30,8 +30,8 @@ class CapacityController < ApplicationController
 
   def predict(start, finish)
     metrics = []
-    start_run = Run.order("id ASC").first.try(:id)
-    end_run = Run.order("id ASC").last.try(:id)
+    end_run = Run.order("id DESC").first.try(:id)
+    start_run = Run.order("id DESC")[20].try(:id) || Run.order("id DESC").last.try(:id)
 
     unless start.nil?
       start_run = Run.where(["begin >= DATE(?)", start]).order("id ASC").first.try(:id)
@@ -43,7 +43,7 @@ class CapacityController < ApplicationController
 
     return [] if start_run.nil? || end_run.nil? || start_run == end_run
 
-    values_and_run_ids = FactSample.find_latest_values_and_run_ids_per_bucket(start_run, end_run)
+    values_and_run_ids = FactSample.where(["run_id >= ? AND run_id <= ?", start_run, end_run])
 
     Metric.where(:relevant => true).includes(:metric_samples).includes(:agent).find_each do |metric|
       metric.curve_fit(values_and_run_ids)
