@@ -20,6 +20,7 @@ class StatsD
   def self.get_rpm_average(start, finish)
     period = "from=#{start.to_i}&until=#{finish.to_i}"
     points = self.history(self.rpm_namespace, period)
+    return 0 if points.count == 0
     average = (points.sum{ |p| p[:y] } / points.count) * 10.0 * 60
   end
 

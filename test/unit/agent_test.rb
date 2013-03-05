@@ -36,6 +36,15 @@ class AgentTest < ActiveSupport::TestCase
     assert_equal nil, metric.maximum
   end
 
+  test "metrics know their group" do
+    Newrelic.expects(:get_metrics).once.returns([{"name" => "System/CPU/User/percent", "fields" => "average_value"}, {"name" => "System/CPU/System/percent", "field" => "average_value"}])
+    @agent.save!
+    @agent.sync_metrics
+    assert_equal 2, @agent.metrics.count
+    assert_equal "CPU", @agent.metrics[0].group
+    assert_equal "CPU", @agent.metrics[1].group
+  end
+
   def mock_newrelic_metrics
     Newrelic.expects(:get_metrics).once.returns([{"name" => "System/Disk/^dev^sd0/Writes/Utilization/percent", "fields" => "average_value"}, {"name" => "unmatching metric", "field" => "dont care"}])
   end

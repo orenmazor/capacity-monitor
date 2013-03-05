@@ -1,7 +1,7 @@
 class Agent < ActiveRecord::Base
   attr_accessible :agent_id, :fetched_at, :hostname
 
-  has_many :metrics
+  has_many :metrics, :dependent => :destroy
 
   def self.rules
     @@rules ||= YAML.load(File.read(Rails.root + 'config/agent_rules.yml'))
@@ -29,9 +29,8 @@ class Agent < ActiveRecord::Base
         record.name = metric["name"]
         record.agent_id = id
         record.field = rule["field"]
-        if rule.has_key? 'maximum'
-          record.maximum = rule['maximum']
-        end
+        record.maximum = rule['maximum']
+        record.group = rule['group']
         record.save
       end
     end
