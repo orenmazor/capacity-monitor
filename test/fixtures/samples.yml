@@ -38,12 +38,12 @@ cpu3:
   type: MetricSample
   run_id: 1002
   metric: app_cpu
-  value: 50
+  value:  22
 
 rpm3:
   type: FactSample
   run_id: 1002
-  value: 30000
+  value: 21000
   bucket_number: 6
 
 disk3:

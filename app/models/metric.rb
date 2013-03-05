@@ -2,7 +2,7 @@ require 'matrix'
 
 class Metric < ActiveRecord::Base
   RELEVANCE_PCT_THRESHOLD = 4
-  OUTLIER_STD = 1
+  OUTLIER_STD = 2
   IRRELEVANT = 6
 
   belongs_to :agent

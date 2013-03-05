@@ -7,7 +7,8 @@ class CapacityControllerTest < ActionController::TestCase
 
     data = JSON.parse(@response.body)
     assert_equal 1, data.count
-    assert_equal 53846, data.first["prediction"]
+    assert_equal 3, data.first["points"].count
+    assert_equal 94999, data.first["prediction"]
   end
 
   test "data accepts start and end time paramters" do
@@ -16,6 +17,7 @@ class CapacityControllerTest < ActionController::TestCase
 
     data = JSON.parse(@response.body)
     assert_equal 1, data.count
+    assert_equal 2, data.first["points"].count
     assert_equal 100000, data.first["prediction"]
   end
 
