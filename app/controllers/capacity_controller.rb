@@ -26,12 +26,29 @@ class CapacityController < ApplicationController
     respond_with @metrics
   end
 
+  def summary
+
+    @metrics = predict(nil, nil)
+
+    @summary = @metrics.group_by { |m| [m.agent.role, m.name] }
+
+    @summary = @summary.map do |k, v|
+      {
+        :role => k[0],
+        :metric => k[1],
+        :prediction => (v.inject(0) { |sum, metric| sum + metric.prediction } / v.count).to_i
+      }
+    end.sort_by { |result| result[:prediction]}
+
+    respond_with @summary
+  end
+
   protected
 
   def predict(start, finish)
     metrics = []
     end_run = Run.order("id DESC").first.try(:id)
-    start_run = Run.order("id DESC")[20].try(:id) || Run.order("id DESC").last.try(:id)
+    start_run = Run.order("id DESC")[30].try(:id) || Run.order("id DESC").last.try(:id)
 
     unless start.nil?
       start_run = Run.where(["begin >= DATE(?)", start]).order("id ASC").first.try(:id)

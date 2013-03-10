@@ -70,10 +70,10 @@ class Metric < ActiveRecord::Base
   end
 
   def update_relevance
-    if samples.count < 2
+    if samples.where(["value > ?", IRRELEVANT]).count < 2
       self.relevant = false
     else
-      sql = "SELECT MAX(value), MIN(value) FROM samples WHERE metric_id = #{id}"
+      sql = "SELECT MAX(value), MIN(value) FROM samples WHERE metric_id = #{id} AND value > #{IRRELEVANT}"
       max, min = ActiveRecord::Base.connection.select_rows(sql).first
       self.relevant = (max.to_f-min.to_f > RELEVANCE_PCT_THRESHOLD)
     end
