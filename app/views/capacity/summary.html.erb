@@ -1,0 +1,18 @@
+<script>
+maxLength = 0;
+
+$.get('/summary.json', function(data) {
+	max = data[data.length - 1].prediction;
+
+	console.log(max);
+
+	predictions = $('#predictions');
+
+	$(data).each(function(idx) {
+    predictions.append('<div>' + data[idx].role + ":" + data[idx].metric + ":" + data[idx].prediction + '</div>')
+	})
+})
+</script>
+
+<div id="predictions">
+</div>
