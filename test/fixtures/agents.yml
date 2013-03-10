@@ -7,3 +7,8 @@ memcached:
   newrelic_id: 101
   role: "Memcached Server"
   hostname: "memcache.server.com"
+
+appserver2:
+  newrelic_id: 102
+  role: "Application Server"
+  hostname: "app2.server.com"

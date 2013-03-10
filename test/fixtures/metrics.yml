@@ -4,6 +4,12 @@ app_cpu:
   agent: appserver
   relevant: true
 
+app_network:
+  name: System/Network/eth0/All/bytes/sec
+  field: max_per_second
+  agent: appserver
+  relevant: true
+
 memcache_network:
   name: System/Network/eth0/All/bytes/sec
   field: max_per_second
@@ -16,3 +22,15 @@ disk:
   agent: appserver
   field: average_value
   relevant: false
+
+app2_cpu:
+  name: System/CPU/IO Wait/percent
+  field: average_value
+  agent: appserver2
+  relevant: true
+
+app2_network:
+  name: System/Network/eth0/All/bytes/sec
+  field: max_per_second
+  agent: appserver2
+  relevant: true

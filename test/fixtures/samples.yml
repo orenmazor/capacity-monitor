@@ -4,6 +4,24 @@ slowcpu:
   run_id: 1000
   value: 10
 
+slowcpu2:
+  type: MetricSample
+  metric: app2_cpu
+  run_id: 1000
+  value: 20
+
+slownet:
+  type: MetricSample
+  metric: app_network
+  run_id: 1000
+  value: 30
+
+slownet2:
+  type: MetricSample
+  metric: app2_network
+  run_id: 1000
+  value: 40
+
 diskone:
   type: MetricSample
   metric: disk
@@ -22,6 +40,24 @@ slowercpu:
   metric: app_cpu
   value: 20
 
+slowercpu2:
+  type: MetricSample
+  run_id: 1001
+  metric: app2_cpu
+  value: 30
+
+slowernet:
+  type: MetricSample
+  run_id: 1001
+  metric: app_network
+  value: 40
+
+slowernet2:
+  type: MetricSample
+  run_id: 1001
+  metric: app2_network
+  value: 50
+
 moarrpm:
   type: FactSample
   run_id: 1001
@@ -39,6 +75,24 @@ cpu3:
   run_id: 1002
   metric: app_cpu
   value:  22
+
+cpu2-3:
+  type: MetricSample
+  run_id: 1002
+  metric: app2_cpu
+  value:  32
+
+net3:
+  type: MetricSample
+  run_id: 1002
+  metric: app_network
+  value:  42
+
+net2-3:
+  type: MetricSample
+  run_id: 1002
+  metric: app2_network
+  value:  52
 
 rpm3:
   type: FactSample
