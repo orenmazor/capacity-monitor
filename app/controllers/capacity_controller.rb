@@ -36,7 +36,7 @@ class CapacityController < ApplicationController
       {
         :role => k[0],
         :metric => k[1],
-        :hostname => k[2]
+        :hostname => k[2],
         :prediction => (v.inject(0) { |sum, metric| sum + metric.prediction } / v.count).to_i
       }
     end.sort_by { |result| result[:prediction]}
