@@ -26,3 +26,19 @@ body { color:#232323; background-color:#dedede; text-align:center; padding-top:2
   padding-top: 15px;
 }
 
+.prediction {
+    text-align: left;
+    
+    .role_metric { float: left; }
+    .rpm { float: right; }
+    .progress { clear: both; }
+}
+
+@media(max-width: 800px) {
+    .prediction {
+        text-align: center;
+        
+        .role_metric { float: none; }
+        .rpm { float: none; }
+    }
+}
