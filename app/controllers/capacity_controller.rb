@@ -30,7 +30,7 @@ class CapacityController < ApplicationController
 
     @metrics = predict(nil, nil)
 
-    @summary = @metrics.group_by { |m| [m.agent.role, m.name, m.hostname] }
+    @summary = @metrics.group_by { |m| [m.agent.role, m.name, m.agent.hostname] }
 
     @summary = @summary.map do |k, v|
       {
