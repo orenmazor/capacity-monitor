@@ -98,6 +98,10 @@ function render_conclusion(data) {
 }
 
 d3.json("/data.json", function (data, error) {
+  if (data.length == 0) {
+    return;
+  }
+  
    d3.select("body").selectAll("p")
      .data(data)
      .enter()

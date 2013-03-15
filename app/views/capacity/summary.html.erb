@@ -4,12 +4,38 @@ maxLength = 0;
 $.get('/summary.json', function(data) {
 	max = data[data.length - 1].prediction;
 
-	console.log(max);
-
 	predictions = $('#predictions');
 
 	$(data).each(function(idx) {
-    predictions.append('<div>' + data[idx].role + ":" + data[idx].metric + ":" + data[idx].prediction + '</div>')
+    width = (data[idx].prediction / max) * 100.0;
+    
+    rpm = $(document.createElement('h4'))
+          .addClass('rpm')
+          .append(document.createTextNode(data[idx].prediction + ' RPM '));
+    
+    role_metric = $(document.createElement('h4'))
+                  .addClass('role_metric')
+                  .append(document.createTextNode(data[idx].role + ' '))
+                  .append(
+                    $(document.createElement('small'))
+                    .append(document.createTextNode(data[idx].metric))
+                  );
+    
+    bar = $(document.createElement('div'))
+          .addClass('progress')
+          .append(
+            $(document.createElement('div'))
+            .addClass('bar')
+            .css('width', width + '%')
+          );
+                  
+    prediction = $(document.createElement('div'))
+                 .addClass('prediction')
+                 .append(role_metric)
+                 .append(rpm)
+                 .append(bar);
+    
+    predictions.append(prediction);
 	})
 })
 </script>
