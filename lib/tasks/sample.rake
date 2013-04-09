@@ -26,10 +26,9 @@ namespace :newrelic do
 
   def sample(start, finish)
 
-    rpm = StatsD.get_rpm_average(start, finish)
     newrelic_rpm = Newrelic.get_value(Newrelic.application.id, "HttpDispatcher", "requests_per_minute", start.iso8601(0), finish.iso8601(0))[0]["requests_per_minute"]
 
-    puts "Sampling #{start}, RPM from StatsD = #{rpm}, NewRelic RPM = #{newrelic_rpm}, diff #{rpm - newrelic_rpm}"
+    puts "Sampling #{start}, RPM from NewRelic= #{newrelic_rpm}"
     if newrelic_rpm == 0
       puts "Newrelic RPM = 0, skipping."
       return
