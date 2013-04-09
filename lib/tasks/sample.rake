@@ -12,6 +12,7 @@ namespace :newrelic do
     update_relevance
   end
 
+  desc "backfill metrics from newrelic, use with START='1.month.ago' or similar"
   task :backfill => [:environment] do
     raise "Run with START='1.month.ago' or similar" unless ENV["START"]
 
