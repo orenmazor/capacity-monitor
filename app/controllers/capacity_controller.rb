@@ -39,7 +39,6 @@ class CapacityController < ApplicationController
         :prediction => (v.inject(0) { |sum, metric| sum + metric.prediction } / v.count).to_i
       }
     end.sort_by { |result| result[:prediction]}
-
     respond_with @summary
   end
 
