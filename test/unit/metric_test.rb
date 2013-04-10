@@ -27,8 +27,7 @@ class MetricTest < ActiveSupport::TestCase
     metric = metrics(:app_cpu)
     fact_samples = FactSample.order("id ASC")
     metric.curve_fit(fact_samples)
-    assert metric.slope > 943 && metric.slope < 944
-    assert metric.offset > 645 && metric.offset < 646
+    assert metric.prediction > 98484 && metric.prediction < 98485
   end
 
   test "Metric knows when it's irrelevant" do

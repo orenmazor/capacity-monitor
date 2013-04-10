@@ -63,7 +63,7 @@ class CapacityController < ApplicationController
 
     Metric.where(:relevant => true).includes(:metric_samples).includes(:agent).find_each do |metric|
       metric.curve_fit(values_and_run_ids)
-      if metric.predict
+      if metric.prediction != 0
         metrics << metric
       end
     end

@@ -18,18 +18,22 @@ class Newrelic
 
     def nr_get(url)
       begin
-        response = Curl::Easy.perform(url) do |curl|
-          curl.headers["x-api-key"] = NewRelicApi.api_key
-        end
-        response.body_str
-      rescue Curl::Err::HostResolutionError, Curl::Err::RecvError => e
-        puts "Curl Error: #{e.message}"
-        nil
+        uri = URI(url)
+        req = Net::HTTP::Get.new(url)
+        req['x-api-key'] = NewRelicApi.api_key
+
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+
+        res = http.request(req)
+        res.body
       end
     end
 
     def get_json(url)
+      Rails.logger.info("Calling newrelic json #{url}")
       response = nr_get(url)
+      Rails.logger.info("Newrelic response #{response}")
       JSON.parse(response) unless response.blank?
     end
 

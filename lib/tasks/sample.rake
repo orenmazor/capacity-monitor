@@ -26,10 +26,9 @@ namespace :newrelic do
   end
 
   def sample(start, finish)
-
     newrelic_rpm = Newrelic.get_value(Newrelic.application.id, "HttpDispatcher", "requests_per_minute", start.iso8601(0), finish.iso8601(0))[0]["requests_per_minute"]
 
-    puts "Sampling #{start}, RPM from NewRelic= #{newrelic_rpm}"
+    puts "Sampling #{start}, RPM from NewRelic=#{newrelic_rpm}"
     if newrelic_rpm == 0
       puts "Newrelic RPM = 0, skipping."
       return
@@ -51,13 +50,15 @@ namespace :newrelic do
       agents = Agent.where(:newrelic_id => newrelic_ids)
 
       result = []
-      metrics.each_slice(10) do |slice|
-        print "."
-        tmp = Newrelic.get_value(newrelic_ids, slice, field, start.iso8601(0), finish.iso8601(0))
-        if tmp.is_a? Array
-          result += tmp
-        else
-          puts "Newrelic returned #{tmp}, expecting array"
+      metrics.each_slice(1) do |metric_slice|
+        newrelic_ids.each_slice(40) do |id_slice|
+          print "."
+          tmp = Newrelic.get_value(id_slice, metric_slice, field, start.iso8601(0), finish.iso8601(0))
+          if tmp.is_a? Array
+            result += tmp
+          else
+            puts "Newrelic returned #{tmp}, expecting array"
+          end
         end
       end
 
@@ -76,8 +77,12 @@ namespace :newrelic do
             if raw
               metric.metric_samples.create(:value => raw[field], :run => run)
               count +=1
+            else
+              puts "No sample for metric #{metric.name}, agent #{agent.hostname}"
             end
           end
+        else
+          puts "No results for agent #{agent.hostname}"
         end
       end
     end
