@@ -7,8 +7,6 @@ gem 'rails', '3.2.12'
 
 gem 'mysql2'
 gem 'newrelic_api'
-gem 'curb'
-gem 'faraday'
 
 gem 'xml-simple'
 
