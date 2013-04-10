@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130409192803) do
+ActiveRecord::Schema.define(:version => 20130410165041) do
 
   create_table "agents", :force => true do |t|
     t.integer  "newrelic_id"
@@ -50,6 +50,11 @@ ActiveRecord::Schema.define(:version => 20130409192803) do
     t.integer  "run_id"
     t.integer  "bucket_number"
     t.integer  "thruzero"
+  end
+
+  create_table "summaries", :force => true do |t|
+    t.date "date"
+    t.text "summary"
   end
 
 end
