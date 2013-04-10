@@ -31,9 +31,7 @@ class Newrelic
     end
 
     def get_json(url)
-      Rails.logger.info("Calling newrelic json #{url}")
       response = nr_get(url)
-      Rails.logger.info("Newrelic response #{response}")
       JSON.parse(response) unless response.blank?
     end
 
