@@ -50,7 +50,7 @@ namespace :newrelic do
       agents = Agent.where(:newrelic_id => newrelic_ids)
 
       result = []
-      metrics.each_slice(1) do |metric_slice|
+      metrics.each_slice(40) do |metric_slice|
         newrelic_ids.each_slice(40) do |id_slice|
           print "."
           tmp = Newrelic.get_value(id_slice, metric_slice, field, start.iso8601(0), finish.iso8601(0))
@@ -77,8 +77,6 @@ namespace :newrelic do
             if raw
               metric.metric_samples.create(:value => raw[field], :run => run)
               count +=1
-            else
-              puts "No sample for metric #{metric.name}, agent #{agent.hostname}"
             end
           end
         else
