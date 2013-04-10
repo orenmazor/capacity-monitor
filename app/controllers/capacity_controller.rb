@@ -6,7 +6,11 @@ class CapacityController < ApplicationController
   end
 
   def data
-    respond_with JSON.parse(Summary.last.summary)
+    @sums = Summary.order('date DESC').limit(20).map do |s|
+      { "date" => s.date, "summary" => JSON.parse(s.summary)}
+    end
+
+    respond_with @sums
   end
 
   def summary
