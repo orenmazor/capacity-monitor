@@ -76,8 +76,10 @@ class Metric < ActiveRecord::Base
     self.best_fit = [[0,0],[100,self.prediction]].to_json
   end
 
-  def update_relevance
-    if samples.where(["value > ?", IRRELEVANT]).count < 2
+  def update_relevance(since = 2.days.ago.to_date)
+    since = Run.order("id DESC").limit(48).last
+
+    if samples.where(["run_id > ? AND value > ?", since, IRRELEVANT]).count < samples.where(["run_id > ?", since]).count / 2
       self.relevant = false
     else
       sql = "SELECT MAX(value), MIN(value) FROM samples WHERE metric_id = #{id} AND value > #{IRRELEVANT}"
