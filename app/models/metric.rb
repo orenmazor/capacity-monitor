@@ -77,7 +77,7 @@ class Metric < ActiveRecord::Base
   end
 
   def update_relevance(since = 2.days.ago.to_date)
-    since = Run.order("id DESC").limit(48).last
+    since = Run.order("id DESC").limit(24).last
 
     if samples.where(["run_id > ? AND value > ?", since, IRRELEVANT]).count < samples.where(["run_id > ?", since]).count / 2
       self.relevant = false
