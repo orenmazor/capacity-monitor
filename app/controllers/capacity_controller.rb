@@ -29,7 +29,7 @@ class CapacityController < ApplicationController
   end
 
   def summary
-    respond_with {JSON.parse(Summary.last.summary)}
+    respond_with JSON.parse(Summary.last.summary)
   end
 
 end
