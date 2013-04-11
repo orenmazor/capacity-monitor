@@ -1,6 +1,6 @@
-- pattern: "System/Disk/.*/Writes/Utilization/percent"
+- pattern: "System/Disk/All/Writes/Utilization/percent"
   field: "average_value"
-- pattern: "System/Disk/.*/Reads/Utilization/percent"
+- pattern: "System/Disk/All/Reads/Utilization/percent"
   field: "average_value"
 - pattern: "System/CPU/.*/percent"
   field: "average_value"
