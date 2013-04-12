@@ -23,7 +23,7 @@ class Oracle
 
     values_and_run_ids = FactSample.where(["run_id >= ? AND run_id <= ?", start_run, end_run])
 
-    Metric.where(:relevant => true).includes(:metric_samples).includes(:agent).find_each do |metric|
+    Metric.where(:relevant => true, :group_metric_id => nil).includes(:metric_samples).includes(:agent).find_each do |metric|
       metric.curve_fit(values_and_run_ids)
       if metric.prediction != 0
         metrics << metric
