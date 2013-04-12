@@ -41,8 +41,8 @@ class AgentTest < ActiveSupport::TestCase
     @agent.save!
     @agent.sync_metrics
     assert_equal 2, @agent.metrics.count
-    assert_equal "CPU", @agent.metrics[0].group
-    assert_equal "CPU", @agent.metrics[1].group
+    assert_equal "CPU", @agent.metrics[0].group_name
+    assert_equal "CPU", @agent.metrics[1].group_name
   end
 
   def mock_newrelic_metrics

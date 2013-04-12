@@ -30,7 +30,7 @@ class Agent < ActiveRecord::Base
         record.agent_id = id
         record.field = rule["field"]
         record.maximum = rule['maximum']
-        record.group = rule['group']
+        record.group_name = rule['group']
         record.save
       end
     end

@@ -39,4 +39,22 @@ class MetricTest < ActiveSupport::TestCase
     metric.update_relevance
     assert metric.relevant
   end
+
+  test "Metric makes a group metric on save if it doesn't exist" do
+    @metric.group_name = "CPU"
+    @metric.save!
+    assert_equal 1, @agent.metrics.where(:name => "CPU").count
+    assert_equal @metric.group_metric, @agent.metrics.where(:name => "CPU").first
+
+    second = Metric.new
+    second.name ="Disk IO Again"
+    second.agent = @agent
+    second.maximum = 100
+    second.group_name = "CPU"
+    second.save!
+
+    assert_equal 1, @agent.metrics.where(:name => "CPU").count
+    assert_equal second.group_metric, @agent.metrics.where(:name => "CPU").first
+  end
 end
+

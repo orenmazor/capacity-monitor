@@ -10,6 +10,27 @@ class Metric < ActiveRecord::Base
   has_many :metric_samples, :dependent => :destroy
   alias :samples :metric_samples
 
+  before_save :sync_with_group
+
+  def sync_with_group
+    return if group_name.nil?
+    existing = Metric.where(:agent_id => self.agent_id, :name => self.group_name).first
+
+    if existing.nil?
+      existing = Metric.new
+      existing.name = self.group_name
+      existing.agent_id = self.agent_id
+      existing.save!
+    end
+
+    self.group_metric_id = existing.id
+  end
+
+  def group_metric
+    return nil if group_metric_id.nil?
+    return Metric.find(group_metric_id)
+  end
+
   def reverse(points)
     points.map { |point| point.reverse }
   end
