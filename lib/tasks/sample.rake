@@ -75,7 +75,9 @@ namespace :newrelic do
           agent.metrics.each do |metric|
             raw = results_by_agent[agent.newrelic_id].detect { |res| res["name"] == metric.name }
             if raw
-              metric.metric_samples.create(:value => raw[field], :run => run)
+              m = metric.metric_samples.new
+              m.run = run
+              m.value = raw[field]
               count +=1
             end
           end
