@@ -8,7 +8,7 @@ class MetricSample < Sample
   end
 
   def recreate_group_sample
-    return unless metric.group_metric
+    return true unless metric.group_metric
     metric.group_metric.samples.where(:run_id => self.run_id).delete_all
     grouped = MetricSample.new
     grouped.metric = metric.group_metric
@@ -19,5 +19,6 @@ class MetricSample < Sample
     grouped.value = samples.sum { |s| s.value }
     grouped.value += self.value if new_record?
     grouped.save!
+    true
   end
 end
