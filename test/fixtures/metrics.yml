@@ -2,12 +2,14 @@ app_cpu:
   name: System/CPU/IO Wait/percent
   field: average_value
   agent: appserver
+  type: NewrelicMetric
   relevant: true
 
 app_network:
   name: System/Network/eth0/All/bytes/sec
   field: max_per_second
   agent: appserver
+  type: NewrelicMetric
   relevant: true
 
 memcache_network:
@@ -15,22 +17,26 @@ memcache_network:
   field: max_per_second
   maximum: 125000000
   agent: memcached
+  type: NewrelicMetric
   relevant: true
 
 disk:
   name: System/Disk/dev^sd0/Reads/Utilization/percent
   agent: appserver
   field: average_value
+  type: NewrelicMetric
   relevant: false
 
 app2_cpu:
   name: System/CPU/IO Wait/percent
   field: average_value
   agent: appserver2
+  type: NewrelicMetric
   relevant: true
 
 app2_network:
   name: System/Network/eth0/All/bytes/sec
   field: max_per_second
   agent: appserver2
+  type: NewrelicMetric
   relevant: true
