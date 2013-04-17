@@ -13,10 +13,10 @@ class Oracle
     end.sort_by { |result| result[:prediction]}
 
     @summary.each do |s|
-      Rails.logger.info("summary role=#{s[:role]} metric=#{s[:metric]} prediction=#{s[:prediction]}")
+      Rails.logger.info("event=summary role=#{s[:role]} metric=#{s[:metric]} prediction=#{s[:prediction]}")
     end
     if @summary.first
-      Rails.logger.info("capacity role=#{s[:role]} metric=#{s[:metric]} prediction=#s[:prediction]}")
+      Rails.logger.info("event=capacity role=#{s[:role]} metric=#{s[:metric]} prediction=#{s[:prediction]}")
     end
   end
 
@@ -33,7 +33,7 @@ class Oracle
     Metric.where(:relevant => true, :group_metric_id => nil).includes(:metric_samples).includes(:agent).find_each do |metric|
       metric.curve_fit(values_and_run_ids)
       if metric.prediction != 0
-        Rails.logger.debug("prediction host=#{metric.agent.hostname} metric_id=#{metric.id} metric_name=#{metric.name} prediction=#{metric.prediction}")
+        Rails.logger.debug("event=prediction host=#{metric.agent.hostname} metric_id=#{metric.id} metric_name=#{metric.name} prediction=#{metric.prediction}")
         metrics << metric
       end
     end
