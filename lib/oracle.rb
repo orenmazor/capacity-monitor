@@ -16,8 +16,10 @@ class Oracle
       Rails.logger.info("event=summary role=#{s[:role]} metric=#{s[:metric]} prediction=#{s[:prediction]}")
     end
     if @summary.first
+      s = @summary.first
       Rails.logger.info("event=capacity role=#{s[:role]} metric=#{s[:metric]} prediction=#{s[:prediction]}")
     end
+    @summary
   end
 
   def self.predict(day = Date.yesterday)
