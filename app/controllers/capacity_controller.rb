@@ -3,9 +3,14 @@ class CapacityController < ApplicationController
   respond_to :html, :json
 
   def index
+    @data = render_data
   end
 
   def data
+    respond_with render_data
+  end
+
+  def render_data
 
     # Summaries look like { date =>, summary => [ {role => "app server", metric => "cpu", prediction => "10"},..]
     # and we want ["app server", "cpu"] => [[date, val],[date,val]]}
@@ -27,7 +32,7 @@ class CapacityController < ApplicationController
       end
     end
 
-    respond_with data.map { |k,v| {"metric"=>k, "points"=>v} }
+    data.map { |k,v| {"metric"=>k, "points"=>v} }
   end
 
   def summary
