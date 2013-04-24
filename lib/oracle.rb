@@ -35,7 +35,7 @@ class Oracle
     Metric.where(:relevant => true, :group_metric_id => nil).includes(:metric_samples).includes(:agent).find_each do |metric|
       metric.curve_fit(values_and_run_ids)
       if metric.prediction != 0
-        Rails.logger.debug("event=prediction host=#{metric.agent.hostname} metric_id=#{metric.id} metric_name=#{metric.name} prediction=#{metric.prediction}")
+        Rails.logger.debug("event=prediction hostname=#{metric.agent.hostname} metric_id=#{metric.id} metric_name=#{metric.name} prediction=#{metric.prediction}")
         metrics << metric
       end
     end

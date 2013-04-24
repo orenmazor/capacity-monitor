@@ -9,22 +9,24 @@ class CapacityController < ApplicationController
 
     # Summaries look like { date =>, summary => [ {role => "app server", metric => "cpu", prediction => "10"},..]
     # and we want ["app server", "cpu"] => [[date, val],[date,val]]}
-    
+
     sums = Summary.order('date DESC').limit(20)
 
     data = {}
-   
+
     sums.each do |s|
       summary = JSON.parse(s.summary)
       summary.each do |pred|
-        key = [pred["role"], pred["metric"]]
+        metric = pred["metric"].split(/\//)[1]
+        metric = pred["metric"] if metric.nil?
+
+        key = [pred["role"], metric]
 
         data[key] ||= []
         data[key] << [s.date, pred["prediction"]]
       end
     end
 
-    
     respond_with data.map { |k,v| {"metric"=>k, "points"=>v} }
   end
 

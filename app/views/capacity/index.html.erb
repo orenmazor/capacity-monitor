@@ -1,73 +1,85 @@
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 
 <script>
-var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 400 - margin.left - margin.right,
-    height = 250 - margin.top - margin.bottom;
+  var seriesData = [
+  {"metric":["Database Server","System/Network/All/All/bytes/sec"],
+    "points":[["2013-04-22",263885],["2013-04-21",274839],["2013-04-20",255229],
+              ["2013-04-19",285541],["2013-04-18",309545],["2013-04-17",329728],
+              ["2013-04-16",308726],["2013-04-15",334446],["2013-04-14",315428],
+              ["2013-04-13",426913],["2013-04-12",395335],["2013-04-11",350290],
+              ["2013-04-10",330775],["2013-04-09",304710],["2013-04-08",275813]]},
+  {"metric":["Application Server","CPU"],"points":[["2013-04-22",435109],["2013-04-21",428457],["2013-04-20",429960],["2013-04-19",437441],["2013-04-18",434443],["2013-04-17",452496],["2013-04-16",433395],["2013-04-15",432461],["2013-04-14",434214],["2013-04-13",445385],["2013-04-12",450606],["2013-04-11",451401],["2013-04-10",401967],["2013-04-09",354568],["2013-04-08",372850]]},
+  {"metric":["Redis Server","System/Network/All/All/bytes/sec"],"points":[["2013-04-22",636625],["2013-04-21",532466],["2013-04-20",581449],["2013-04-19",669509],["2013-04-18",735328],["2013-04-17",780940],["2013-04-16",786858],["2013-04-15",705533],["2013-04-14",601328]]},
+  {"metric":["Memcache Server","System/Network/All/All/bytes/sec"],"points":[["2013-04-22",741595],["2013-04-21",664134],["2013-04-13",651575],["2013-04-12",770787],["2013-04-11",774207],["2013-04-10",693055],["2013-04-09",706603],["2013-04-08",744469]]},
+  {"metric":["Redis Server","CPU"],"points":[["2013-04-21",439603],["2013-04-20",560921],["2013-04-19",868397],["2013-04-18",752081]]},
+  {"metric":["Application Server","System/Disk/All/Writes/Utilization/percent"],"points":[["2013-04-09",536671]]}];
 
-  var rendered = {};
+  var dataDays = _.map(seriesData, function(metric){
+    return _.map(metric.points, function(point){ return point[0];});
+  });
 
-  function render_graph(data) {
+  var days = _.chain(dataDays)
+    .flatten()
+    .unique()
+    .reverse()
+    .value();
 
-    if (rendered[data.index] == true) {
-      return
-    }
+  var series = [];
 
-    points = data.points
+  _.each(seriesData, function(data){
+    var serieData = { name: data['metric'][0] + "-" + data['metric'][1], data: []};
 
-    nv.addGraph(function() {
-      var chart = nv.models.discreteBarChart()
-         .x(function(d) { return d[0] })
-         .y(function(d) { return d[1] })
-         .staggerLabels(true)
-         .tooltips(false)
-         .showValues(true)
-
-      d3.select('#graph-' + data.index + " svg")
-         .datum(points)
-         .transition().duration(500)
-         .call(chart);
-
-      nv.utils.windowResize(chart.update);
-
-      return chart;
+    _.each(days, function(day){
+      element = _.find(data['points'], function(point){ return (point[0] === day) });
+      serieData['data'].push((element != null) ? element[1] : null)
     });
 
-   }
+    series.push(serieData);
+  });
 
-   function render_snippet(data) {
-    $('#graphs').append(['<div class="row">',
-      '<div class="metric span4">',
-        'Role: ' + data.metric[0]  + '<br />',
-        'Metric: ' + data.metric[1] + '<br />',
-      '</div>',
-      '<div id="graph-' + data.index + '" class="span8"><svg style="height:500px"> </svg></div>',
-    '</div>'
-    ].join("\n"));
-    render_graph(data);
-   }
-
-function render_conclusion(data) {
-  $('#conclusion').html(['<span class="rpm">' + data.host + '</span> will exhaust ',
-      '<span class="rpm">' + data.name + '</span> at ',
-      '<span class="rpm">' + data.prediction + '</span> RPM'].join(''))
-}
-
-d3.json("/data.json", function (data, error) {
-  if (data.length == 0) {
-    return;
-  }
-  
-   d3.select("body").selectAll("p")
-     .data(data)
-     .enter()
-     .append("p")
-     .each(render_snippet);
-
-});
-
+$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: 'Shopify Capacity',
+                x: -20 //center
+            },
+            xAxis: {
+                categories: days
+            },
+            yAxis: {
+                title: {
+                    text: 'RPM'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ' RPM'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: series
+        });
+    });
 </script>
 
-<div id="conclusion">
-  <marquee>Loading...</marquee>
-</div>
-<div id="graphs"></div>
